@@ -107,7 +107,7 @@
             changelog = "https://github.com/SimonN/LixD/releases/tag/v${lix-game.version}";
             license = lib.unique (
                 [lib.licenses.cc0] ++ 
-                (lix-game-assets.meta.license or []) ++ 
+                lib.toList (lix-game-assets.meta.license or []) ++ 
                 lib.optionals includeMusic (lib.toList (lix-game-music.license or []))
             );
             mainProgram = "lix";
