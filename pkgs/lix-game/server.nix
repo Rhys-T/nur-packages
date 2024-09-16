@@ -6,7 +6,7 @@
         dependencies = lib.filterAttrs (name: info: builtins.elem name ["derelict-enet" "derelict-util"]) fullLock.dependencies;
     };
     buildInputs = [enet];
-    postConfigure = patchEnetBindings { inherit stdenvNoCC lib enet; };
+    postConfigure = patchEnetBindings;
     sourceRoot = "source/src/server";
     postUnpack = ''chmod u+w "$sourceRoot"/../..''; # need to be able to create 'bin' directory there
     installPhase = ''
