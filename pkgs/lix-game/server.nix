@@ -16,7 +16,7 @@
     runHook postInstall
     '';
     meta = {
-        inherit (lix-game.meta) homepage;
+        inherit (lix-game.meta) homepage maintainers;
         license = lib.licenses.cc0;
         mainProgram = "lixserv";
     };
