@@ -16,6 +16,7 @@
     runHook postInstall
     '';
     meta = {
+        description = "${lix-game.meta.description} (standalone multiplayer server)";
         inherit (lix-game.meta) homepage maintainers;
         license = lib.licenses.cc0;
         mainProgram = "lixserv";
