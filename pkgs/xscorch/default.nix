@@ -33,9 +33,11 @@
     tar -xaf "$debian"
     patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
     '';
-    postPatch = ''patchShebangs doc/make_text_data.pl'';
+    postPatch = ''
+        patchShebangs doc/make_text_data.pl
+        substituteInPlace Makefile.in --replace-fail '@NETWORK_TRUE@am__EXEEXT_' '#am__EXEEXT_'
+    '';
     postInstall = ''
-    rm "$out"/bin/xscorch-server
     rmdir "$out"/include
     mkdir -p "$out"/share/applications "$out"/share/pixmaps "$out"/share/doc/xscorch
     cp debian/xscorch.desktop "$out"/share/applications
