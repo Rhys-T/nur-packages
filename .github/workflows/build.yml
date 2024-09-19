@@ -40,9 +40,13 @@ jobs:
         runner:
           - ubuntu-latest
         include:
-          - runner: macos-latest
+          - nurRepo: Rhys-T
+            cachixName: rhys-t
+            runner: macos-latest
             nixPath: nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixpkgs-unstable.tar.gz
-          - runner: macos-13
+          - nurRepo: Rhys-T
+            cachixName: rhys-t
+            runner: macos-13
             nixPath: nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixpkgs-unstable.tar.gz
     runs-on: ubuntu-latest
     steps:
