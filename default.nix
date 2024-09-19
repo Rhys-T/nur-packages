@@ -29,6 +29,7 @@ in rec {
   # lix-game = pkgs.callPackage ./pkgs/lix-game/wrapper.nix { inherit lix-game-unwrapped lix-game-assets lix-game-music maintainers; };
   lix-game-packages = recurseIntoAttrs (pkgs.callPackage ./pkgs/lix-game { inherit maintainers; });
   lix-game = lix-game-packages.game;
+  lix-game-server = lix-game-packages.server;
   
   xscorch = pkgs.callPackage ./pkgs/xscorch { inherit maintainers; };
 }
