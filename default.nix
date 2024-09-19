@@ -22,11 +22,6 @@ in rec {
   # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };
   # ...
   
-  # lix-game-unwrapped = pkgs.callPackage ./pkgs/lix-game { inherit lix-game maintainers; };
-  # lix-game-assets = pkgs.callPackage ./pkgs/lix-game/assets.nix { inherit lix-game; };
-  # lix-game-music = pkgs.callPackage ./pkgs/lix-game/music.nix { inherit lix-game; };
-  # lix-game-server = pkgs.callPackage ./pkgs/lix-game/server.nix { inherit lix-game; };
-  # lix-game = pkgs.callPackage ./pkgs/lix-game/wrapper.nix { inherit lix-game-unwrapped lix-game-assets lix-game-music maintainers; };
   lix-game-packages = recurseIntoAttrs (pkgs.callPackage ./pkgs/lix-game { inherit maintainers; });
   lix-game = lix-game-packages.game;
   lix-game-server = lix-game-packages.server;
