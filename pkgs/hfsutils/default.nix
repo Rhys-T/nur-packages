@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = lib.optionals enableTclTk [tcl tk];
   configureFlags = [(lib.withFeatureAs enableTclTk "tcl" "${tcl}") (lib.withFeatureAs enableTclTk "tk" "${tk}")];
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int" + lib.optionalString (stdenv.cc.isClang && enableTclTk) " -Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && enableTclTk) "-Wno-error=incompatible-function-pointer-types";
 
   srcs = [
     # Actual source
@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     touch .stamp/*
 
+    for configure in configure */configure; do
+      sed -i 's/^main()/int main()/' "$configure"
+    done
     substituteInPlace Makefile.in \
       --replace-fail '"$(BINDEST)/."' \
                 '-Dt "$(BINDEST)"' \
