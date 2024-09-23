@@ -106,6 +106,7 @@ in stdenv.mkDerivation (finalAttrs: let self = finalAttrs.finalPackage; in {
             Avoid exposing its server or client to untrusted networks.
         ''];
         license = with lib.licenses; [mit artistic2];
+        mainProgram = "bubbros";
         maintainers = [maintainers.Rhys-T];
     };
 })
