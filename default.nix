@@ -32,4 +32,6 @@ rec {
         enableUnfreeROMs = true;
     };
     pce-snapshot = pkgs.callPackage ./pkgs/pce/snapshot.nix { inherit maintainers; };
+    
+    bubbros = pkgs.callPackage ./pkgs/bubbros { inherit maintainers; };
 }
