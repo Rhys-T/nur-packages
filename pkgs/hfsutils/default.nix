@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = lib.optionals enableTclTk [tcl tk];
   configureFlags = [(lib.withFeatureAs enableTclTk "tcl" "${tcl}") (lib.withFeatureAs enableTclTk "tk" "${tk}")];
-  env.${if enableTclTk then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int" + lib.optionalString enableTclTk " -Wno-error=incompatible-function-pointer-types";
 
   srcs = [
     # Actual source
@@ -57,9 +57,6 @@ stdenv.mkDerivation rec {
       --replace-fail '"$(MANDEST)' \
                 '-DT "$(MANDEST)'
     
-    for configure in configure */configure; do
-      sed -i 's/^main()/int main()/' "$configure"
-    done
     sed -i '1i\
     #include <string.h>
     ' hpwd.c
