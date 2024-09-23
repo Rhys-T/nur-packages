@@ -1,9 +1,13 @@
-{ stdenv, lib, fetchurl, maintainers }:
+{ stdenv, lib, fetchurl, fetchpatch, enableTclTk ? false, tcl, tk, maintainers }:
 
 stdenv.mkDerivation rec {
   pname = "hfsutils";
   baseversion = "3.2.6";
   version = "${baseversion}-14";
+  
+  buildInputs = lib.optionals enableTclTk [tcl tk];
+  configureFlags = [(lib.withFeatureAs enableTclTk "tcl" "${tcl}") (lib.withFeatureAs enableTclTk "tk" "${tk}")];
+  env.${if enableTclTk then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=incompatible-function-pointer-types";
 
   srcs = [
     # Actual source
@@ -32,6 +36,17 @@ stdenv.mkDerivation rec {
       patches+=" ../debian/patches/$p"
     done
   '';
+
+  patches = [
+    ./0001-Don-t-set-ug-id-unless-it-s-actually-different.patch
+  ] ++ lib.optionals enableTclTk [
+    ./0002-Rename-bitmaps-to-avoid-conflict-with-Mac-builtins.patch
+    (fetchpatch {
+      name = "0003-xhfs-Use-Tcl_Alloc-Tcl_Free-as-required-when-interac.patch";
+      url = https://github.com/JotaRandom/hfsutils/commit/e62ea3c5ac49ca894db853d966f1cd2cb808f35c.patch;
+      hash = "sha256-gEvzZAHb3cfGY8/gQI9woK48a+cn+wiXhhslHgg/osI=";
+    })
+  ];
 
   postPatch = ''
     touch .stamp/*
