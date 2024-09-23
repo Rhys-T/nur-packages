@@ -72,4 +72,11 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.mars.org/home/rob/proj/hfs";
   };
+  
+  passthru._Rhys-T.flakeApps = name: hfsutils: lib.optionalAttrs enableTclTk {
+    xhfs = {
+      type = "app";
+      program = lib.getExe' hfsutils "xhfs";
+    };
+  };
 }
