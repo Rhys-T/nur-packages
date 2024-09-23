@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, enableTclTk ? false, tcl, tk, maintainers }:
+{ stdenv, lib, writeShellScript, fetchurl, fetchpatch, enableTclTk ? false, tcl, tk, maintainers }:
 
 stdenv.mkDerivation rec {
   pname = "hfsutils";
@@ -7,6 +7,15 @@ stdenv.mkDerivation rec {
   
   buildInputs = lib.optionals enableTclTk [tcl tk];
   configureFlags = [(lib.withFeatureAs enableTclTk "tcl" "${tcl}") (lib.withFeatureAs enableTclTk "tk" "${tk}")];
+  configureScript = writeShellScript "configure-or-show-log" ''
+    ./configure "$@"
+    result=$?
+    if [[ $result -ne 0 ]]; then
+      echo "configure exited with $result"
+      cat config.log
+    fi
+    exit $result
+  '';
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int" + lib.optionalString enableTclTk " -Wno-error=incompatible-function-pointer-types";
 
   srcs = [
