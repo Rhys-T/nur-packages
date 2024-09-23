@@ -34,4 +34,7 @@ rec {
     pce-snapshot = pkgs.callPackage ./pkgs/pce/snapshot.nix { inherit maintainers; };
     
     bubbros = pkgs.callPackage ./pkgs/bubbros { inherit maintainers; };
+    
+    flatzebra = pkgs.callPackage ./pkgs/flatzebra { inherit maintainers; };
+    burgerspace = pkgs.callPackage ./pkgs/flatzebra/burgerspace.nix { inherit flatzebra maintainers; };
 }
