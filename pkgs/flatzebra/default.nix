@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL2, SDL2_gfx, SDL2_image, SDL2_mixer, SDL2_ttf, pkg-config, maintainers}: stdenv.mkDerivation {
+{stdenv, lib, fetchurl, SDL2, SDL2_gfx, SDL2_image, SDL2_mixer, SDL2_ttf, pkg-config, maintainers}: stdenv.mkDerivation {
     pname = "flatzebra";
     version = "0.2.0";
     src = fetchurl {
@@ -14,6 +14,7 @@
     meta = {
         description = "Generic game engine for 2D double-buffering animation";
         homepage = "http://perso.b2b2c.ca/~sarrazip/dev/burgerspace.html";
+        license = lib.licenses.gpl2Plus;
         maintainers = [maintainers.Rhys-T];
     };
 }

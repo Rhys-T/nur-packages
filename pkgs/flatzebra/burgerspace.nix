@@ -1,4 +1,4 @@
-{stdenv, fetchurl, flatzebra, pkg-config, maintainers}: stdenv.mkDerivation {
+{stdenv, lib, fetchurl, flatzebra, pkg-config, maintainers}: stdenv.mkDerivation {
     pname = "burgerspace";
     version = "1.10.0";
     src = fetchurl {
@@ -16,6 +16,7 @@
     meta = {
         description = "Hamburger-smashing video game";
         homepage = "http://perso.b2b2c.ca/~sarrazip/dev/burgerspace.html";
+        license = lib.licenses.gpl2Plus;
         maintainers = [maintainers.Rhys-T];
     };
 }
