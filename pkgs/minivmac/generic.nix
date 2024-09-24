@@ -74,8 +74,13 @@ let
                 makeWrapper $out/Applications/minivmac.app/Contents/MacOS/minivmac $out/bin/minivmac
                 '';
                 meta = {
+                    description = "Miniature early Macintosh emulator";
+                    longDescription = ''
+                        The Mini vMac emulator collection allows modern computers to run software made for early Macintosh computers, the computers that Apple sold from 1984 to 1996 based upon Motorola's 680x0 microprocessors. Mini vMac is part of the [Gryphel Project](https://www.gryphel.com/).
+                    '';
                     homepage = "https://www.gryphel.com/c/minivmac/";
-                    license = lib.licenses.gpl2;
+                    changelog = "https://www.gryphel.com/c/minivmac/change/v${lib.versions.major version}.html";
+                    license = lib.licenses.gpl2Only;
                     branch = lib.versions.major version;
                     platforms = builtins.attrNames targetCodes;
                     maintainers = [ maintainers.Rhys-T ];
