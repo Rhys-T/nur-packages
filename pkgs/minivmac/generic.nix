@@ -14,17 +14,28 @@ let
                 pname = execName;
             }
         else
-        with stdenv;
-        if applyMacDataPathPatch && !stdenv.hostPlatform.isDarwin then throw "patch only valid on Mac" else
         let
-            targetCode = {
+            inherit (stdenv) hostPlatform;
+            inherit (hostPlatform) isDarwin isLinux;
+            targetCodes = {
                 x86_64-linux = "lx64";
                 i686-linux = "lx86";
                 x86_64-darwin = "mc64";
+            } // lib.optionalAttrs ((builtins.compareVersions "37a" version) <= 0) {
                 aarch64-darwin = "mcar";
-            }.${hostPlatform.system} or (throw "FIXME unsupported system");
+            };
             minivmacOptions = options.buildOptionsFrom args;
-            minivmac = mkDerivation {
+            targetCode = minivmacOptions.targetCode or targetCodes.${hostPlatform.system} or (throw ''
+                Platform ${hostPlatform.system} is not currently supported by this derivation.
+                If this platform is listed on one of:
+                - https://www.gryphel.com/c/minivmac/options.html#option_t
+                - https://www.gryphel.com/c/minivmac/develop.html#option_t
+                then you can try overriding the "targetCode" option and passing the correct code there.
+            '');
+        in
+        assert lib.assertMsg (!(applyMacDataPathPatch && !isDarwin)) "patch only valid on Mac";
+        let
+            minivmac = stdenv.mkDerivation {
                 pname = "minivmac";
                 inherit version src;
                 patches = lib.optionals applyMacDataPathPatch [ ./mac-data-path-from-env.patch ];
@@ -66,11 +77,7 @@ let
                     homepage = "https://www.gryphel.com/c/minivmac/";
                     license = lib.licenses.gpl2;
                     branch = lib.versions.major version;
-                    platforms = [
-                        "i686-linux"
-                        "x86_64-linux"
-                        "x86_64-darwin"
-                    ] ++ lib.optional ((builtins.compareVersions "37a" version) <= 0) "aarch64-darwin";
+                    platforms = builtins.attrNames targetCodes;
                     maintainers = [ maintainers.Rhys-T ];
                     mainProgram = execName;
                 };
