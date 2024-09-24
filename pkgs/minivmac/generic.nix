@@ -65,6 +65,7 @@ let
                 meta = {
                     homepage = "https://www.gryphel.com/c/minivmac/";
                     license = lib.licenses.gpl2;
+                    branch = lib.versions.major version;
                     platforms = [
                         "i686-linux"
                         "x86_64-linux"
