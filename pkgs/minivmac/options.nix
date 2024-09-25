@@ -12,7 +12,7 @@ let
     ];
     withOrder = o: f: {__functor = self: f; order = o;};
     optProc = {
-        targetCode = procstr "t";
+        targetCode = procStr "t";
         macType = procStr "m";
         localtalk = procBoolNoArg "lt";
         localtalkOver = procStr "lto";
