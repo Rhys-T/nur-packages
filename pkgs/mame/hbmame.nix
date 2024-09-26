@@ -1,4 +1,4 @@
-{ mame, lib, fetchFromGitHub, fetchpatch, stdenv }: mame.overrideAttrs (old: rec {
+{ mame, lib, fetchFromGitHub, fetchpatch, makeDesktopItem, stdenv }: mame.overrideAttrs (old: rec {
     pname = "hbmame";
     version = "0.245.20";
     src = fetchFromGitHub {
@@ -7,6 +7,19 @@
         rev = "tag${builtins.replaceStrings [ "." ] [ "" ] (lib.removePrefix "0." version)}";
         sha256 = "sha256-Q4mvgjnlDML1xFORPpcTq/3VKOnCccCXA1cPn+L5jJ8=";
     };
+    desktopItems = [
+        (makeDesktopItem {
+            name = "HBMAME";
+            desktopName = "HBMAME";
+            exec = "hbmame";
+            icon = "mame"; # TODO find an HBMAME-specific icon?
+            type = "Application";
+            genericName = "Multi-purpose homebrew emulation framework";
+            # comment = "Play vintage games using the MAME emulator";
+            categories = [ "Game" "Emulator" ];
+            keywords = [ "Game" "Emulator" "Arcade" ];
+        })
+    ];
     patches = [
         ./patches/hbmame/0001-monaco-fix-out-of-bounds-array-access.patch
     ] ++ map (patch: if lib.hasInfix "001-use-absolute-paths" (""+patch) then fetchpatch {
