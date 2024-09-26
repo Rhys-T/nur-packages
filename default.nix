@@ -65,4 +65,6 @@ rec {
     mame-metal = pkgs.callPackage (pkgs.callPackage ./pkgs/mame {}) {
         darwinMinVersion = "11.0";
     };
+    
+    konify = pkgs.callPackage ./pkgs/konify { inherit maintainers; };
 }
