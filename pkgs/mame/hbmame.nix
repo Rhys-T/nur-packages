@@ -20,8 +20,10 @@
     makeFlags = (old.makeFlags or []) ++ ["TARGET=hbmame"];
     installPhase = builtins.replaceStrings [
         "install -Dm755 mame -t $out/bin"
+        "{artwork,bgfx,plugins,language,ctrlr,keymaps,hash}"
     ] [
         "install -Dm755 hbmame -t $out/bin"
+        "{artwork,bgfx,plugins,language,ctrlr,hash}" # no keymaps included with HBMAME
     ] old.installPhase;
     env = (old.env or {}) // {
         NIX_CFLAGS_COMPILE = (old.env.NIX_CFLAGS_COMPILE or "") + lib.optionalString stdenv.cc.isClang (
