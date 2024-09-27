@@ -39,14 +39,14 @@ jobs:
           - nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-24.05.tar.gz
         runner:
           - ubuntu-latest
-          - macos-latest
-        exclude:
-          - {} # exclude everything…
-        include: # …then add these combos back in
-          - runner: ubuntu-latest
-          - runner: macos-latest
+        include:
+          - nurRepo: Rhys-T
+            cachixName: rhys-t
+            runner: macos-latest
             nixPath: nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixpkgs-unstable.tar.gz
-          - runner: macos-13
+          - nurRepo: Rhys-T
+            cachixName: rhys-t
+            runner: macos-13
             nixPath: nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixpkgs-unstable.tar.gz
     runs-on: ${{ matrix.runner }}
     steps:
