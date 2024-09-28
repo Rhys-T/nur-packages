@@ -68,6 +68,8 @@ rec {
     hbmame = pkgs.callPackage ./pkgs/mame/hbmame.nix { inherit mame; };
     hbmame-metal = pkgs.callPackage ./pkgs/mame/hbmame.nix { mame = mame-metal; };
     
+    pacifi3d = pkgs.callPackage ./pkgs/pacifi3d { inherit maintainers; };
+    
     konify = pkgs.callPackage ./pkgs/konify { inherit maintainers; };
     
     # Can't just pass `-L` to `nix-build-uncached`: it ends up being passed to both
