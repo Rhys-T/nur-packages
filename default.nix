@@ -69,6 +69,8 @@ rec {
     hbmame-metal = pkgs.callPackage ./pkgs/mame/hbmame.nix { mame = mame-metal; };
     
     pacifi3d = pkgs.callPackage ./pkgs/pacifi3d { inherit maintainers; };
+    pacifi3d-mame = pacifi3d.override { romsFromMAME = mame; };
+    pacifi3d-hbmame = pacifi3d.override { romsFromMAME = hbmame; };
     
     konify = pkgs.callPackage ./pkgs/konify { inherit maintainers; };
     
