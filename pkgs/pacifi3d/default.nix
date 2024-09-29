@@ -11,7 +11,7 @@
     '' else null,
     maintainers
 }: let
-    romSourceName = romsFromMAME.name or (lib.removeSuffix ".xml" romsFromXML.name);
+    romSourceName = romsFromMAME.name or (lib.removeSuffix ".xml" (romsFromXML.name or ""));
     romSourcePname = lib.getName romSourceName;
     romSourceVersion = lib.getVersion romSourceName;
     baseVersion = "0.3";
