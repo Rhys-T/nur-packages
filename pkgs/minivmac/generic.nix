@@ -1,7 +1,9 @@
 let
     options = import ./options.nix {};
     minivmacFunc = {
-        pname ? "minivmac" + lib.optionalString ((args.macType or "Plus") != "Plus") "-${lib.toLower args.macType}",
+        pname ? let
+            model = args.macModel or args.macType or "Plus";
+        in "minivmac" + lib.optionalString (model != "Plus") "-${lib.toLower model}",
         version,
         src,
         applyMacDataPathPatch ? false,

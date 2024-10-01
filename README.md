@@ -68,14 +68,14 @@ I've made several of the [compile-time options](https://www.gryphel.com/c/minivm
 ```nix
 minivmac.override {
     pname = "minivmac-se";
-    macType = "SE";
+    macModel = "SE";
 }
 ```
 
 ```nix
 minivmac37.override {
     pname = "minivmac-for-atalk-games";
-    macType = "II";
+    macModel = "II";
     resolution = "800x600";
     localtalk = true;
     localtalkOver = "udp";
