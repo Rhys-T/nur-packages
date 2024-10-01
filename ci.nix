@@ -5,7 +5,7 @@
 # - broken (using `meta.broken`),
 # - unfree (using `meta.license.free`),
 # - platform-specific (using `meta.platform` and `meta.badPlatforms`), and
-# - locally built (using `preferLocalBuild`)
+# - uncacheable (using `allowSubstitutes`)
 #
 # then your CI will be able to build and cache only those packages for
 # which this is possible.
@@ -26,7 +26,7 @@ let
     builtins.all (license: license.free or true) licenseList &&
     (p.meta.knownVulnerabilities or []) == []
   ;
-  isCacheable = p: !(p.preferLocalBuild or false);
+  isCacheable = p: (p.allowSubstitutes or true);
   shouldRecurseForDerivations = p: isAttrs p && p.recurseForDerivations or false;
 
   nameValuePair = n: v: { name = n; value = v; };
