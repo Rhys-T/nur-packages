@@ -63,9 +63,18 @@ The `mame` derivation in nixpkgs is currently broken on macOS. By default, nixpk
 
 I've made several of the [compile-time options](https://www.gryphel.com/c/minivmac/options.html) for Mini vMac available through `minivmac.override { ... }`. Until I can document this properly, look for the `optProc` block in `pkgs/minivmac/options.nix` to see what's available. For anything I haven't covered, you can override `rawOptions` with a string to add to the end of the `./setup_t` command.
 
-#### Example
+#### Examples
+
+```nix
+minivmac.override {
+    pname = "minivmac-se";
+    macType = "SE";
+}
+```
+
 ```nix
 minivmac37.override {
+    pname = "minivmac-for-atalk-games";
     macType = "II";
     resolution = "800x600";
     localtalk = true;
