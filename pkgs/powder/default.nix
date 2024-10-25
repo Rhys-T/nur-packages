@@ -1,4 +1,4 @@
-{ stdenv, lib, SDL_compat, fetchurl }: stdenv.mkDerivation rec {
+{ stdenv, lib, SDL_compat, fetchurl, maintainers }: let maintainers' = maintainers; in stdenv.mkDerivation rec {
     pname = "powder";
     version = "118";
     src = fetchurl {
@@ -120,6 +120,6 @@
             
             # There's also some Apache-2.0 code in there, but only in the Android port.
         ];
+        maintainers = [maintainers'.Rhys-T];
     };
-    maintainers = [maintainers.Rhys-T];
 }
