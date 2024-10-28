@@ -56,7 +56,7 @@ in {
         assets-PNG32 = (self.lix-game-packages.overrideScope (self: super: {
             convertImagesToTrueColor = true;
         })).assets;
-        inherit (lix-game-packages) highResTitleScreen;
+        inherit (self.lix-game-packages) highResTitleScreen;
     };
     
     xscorch = callPackage ./pkgs/xscorch {};
