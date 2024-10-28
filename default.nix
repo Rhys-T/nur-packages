@@ -129,6 +129,12 @@ in {
     _ciOnly.mac = pkgs.lib.optionalAttrs pkgs.hostPlatform.isDarwin (pkgs.lib.recurseIntoAttrs {
         wine64Full = pkgs.wine64Packages.full;
     });
+    
+    _ciOnly.dev = pkgs.lib.optionalAttrs (pkgs.hostPlatform.system == "x86_64-darwin") (pkgs.lib.recurseIntoAttrs {
+        checkpoint = pkgs.lib.recurseIntoAttrs (lib.mapAttrs (k: pkgs.checkpointBuildTools.prepareCheckpointBuild) {
+            inherit (self) hbmame;
+        });
+    });
 }); in result // {
     lib = result.myLib;
     modules = result.myModules;
