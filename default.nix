@@ -50,12 +50,13 @@ in {
         disableNativeImageLoader = "CIImage";
     })).game else self.lix-game;
     _ciOnly.lix-game = pkgs.lib.recurseIntoAttrs {
-        lix-game-assets = (self.lix-game-packages.overrideScope (self: super: {
+        assets = (self.lix-game-packages.overrideScope (self: super: {
             convertImagesToTrueColor = false;
         })).assets;
-        lix-game-assets-PNG32 = (self.lix-game-packages.overrideScope (self: super: {
+        assets-PNG32 = (self.lix-game-packages.overrideScope (self: super: {
             convertImagesToTrueColor = true;
         })).assets;
+        inherit (lix-game-packages) highResTitleScreen;
     };
     
     xscorch = callPackage ./pkgs/xscorch {};
