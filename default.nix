@@ -131,7 +131,7 @@ in {
     });
     
     _ciOnly.dev = pkgs.lib.optionalAttrs (pkgs.hostPlatform.system == "x86_64-darwin") (pkgs.lib.recurseIntoAttrs {
-        checkpoint = pkgs.lib.recurseIntoAttrs (lib.mapAttrs (k: pkgs.checkpointBuildTools.prepareCheckpointBuild) {
+        checkpoint = pkgs.lib.recurseIntoAttrs (pkgs.lib.mapAttrs (k: pkgs.checkpointBuildTools.prepareCheckpointBuild) {
             inherit (self) hbmame;
         });
     });
