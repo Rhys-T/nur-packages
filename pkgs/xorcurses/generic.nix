@@ -21,6 +21,7 @@
         '';
         inherit homepage;
         license = lib.licenses.gpl3Only;
+        mainProgram = "xorcurses";
         maintainers = [maintainers.Rhys-T];
     };
 }
