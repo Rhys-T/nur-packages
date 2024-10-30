@@ -30,6 +30,7 @@ jobs:
               "Linux x86-64/ubuntu-latest",
               "Linux ARM64/ubuntu-latest+qemu-aarch64-linux",
               "macOS x86-64/macos-13",
+              "macOS x86-64 OLD/macos-12",
               "macOS ARM64/macos-latest",
             empty] as $runners |
             
