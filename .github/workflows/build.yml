@@ -93,7 +93,7 @@ jobs:
           -I $PWD
     - name: Build nix packages
       # run: nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached ci.nix -A cacheOutputs
-      run: nix shell -f '.' nix-build-uncached-logging -c nix-build-uncached ci.nix ${{ matrix.qemuSystem && format('--argstr platform {0}', matrix.qemuSystem)}} -A cacheOutputs
+      run: nix shell -f '.' nix-build-uncached-logging -c nix-build-uncached ci.nix ${{ matrix.runner == 'macos-12' && '--arg includeDRL true' || '' }} ${{ matrix.qemuSystem && format('--argstr platform {0}', matrix.qemuSystem) }} -A cacheOutputs
     - name: Upload debug info
       if: '!cancelled()'
       uses: actions/upload-artifact@v4
