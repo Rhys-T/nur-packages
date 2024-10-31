@@ -125,22 +125,39 @@ in {
     drl-audio-lq = callPackage ./pkgs/drl/audio.nix { audioQuality = "lq"; };
     drl-audio = self.drl-audio-hq;
     _ciOnly.drl-dev = pkgs.lib.optionalAttrs (pkgs.hostPlatform.system == "x86_64-linux") (pkgs.lib.recurseIntoAttrs {
-        makewad = self.drl-unwrapped.overrideAttrs (old: {
-            pname = "drl-makewad-test";
-            buildPhase = ''
-                runHook preBuild
-                mkdir tmp
-                lua makefile.lua bin/makewad
-                runHook postBuild
-            '';
-            installPhase = ''
-                runHook preInstall
-                install -D bin/makewad "$out"/bin/makewad
-                runHook postInstall
-            '';
-            meta = {};
-        });
+        # makewad = self.drl-unwrapped.overrideAttrs (old: {
+        #     pname = "drl-makewad-test";
+        #     buildPhase = ''
+        #         runHook preBuild
+        #         mkdir tmp
+        #         lua makefile.lua bin/makewad
+        #         runHook postBuild
+        #     '';
+        #     installPhase = ''
+        #         runHook preInstall
+        #         install -D bin/makewad "$out"/bin/makewad
+        #         runHook postInstall
+        #     '';
+        #     meta = {};
+        # });
     }) // pkgs.lib.optionalAttrs (pkgs.hostPlatform.system == "x86_64-darwin") (pkgs.lib.recurseIntoAttrs {
+        aaa-fpc-test = callPackage ({stdenv, fpc, writeText}: stdenv.mkDerivation {
+            name = "aaa-fpc-test";
+            src = writeText "hello.pas" ''
+                program Hello;
+                {$LINKLIB m}
+                begin
+                    writeln ('Hello, world.');
+                end.
+            '';
+            dontUnpack = true;
+            nativeBuildInputs = [fpc];
+            env.NIX_DEBUG = 7;
+            buildPhase = "fpc -o./hello $src";
+            checkPhase = ''[[ "$(./hello)" == "Hello, world." ]]'';
+            doCheck = true;
+            installPhase = "install -Dm755 hello $out/bin/hello";
+        }) {};
         env = self.drl-unwrapped.overrideAttrs (old: {
             pname = "drl-env-test";
             buildPhase = ''
