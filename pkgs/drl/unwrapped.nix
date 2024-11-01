@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
                 mod = mod,
             }
         end)()"${lib.optionalString stdenv.isLinux '' \
-            --replace-fail 'os.execute_in_dir( "makewad", "bin" )' 'os.execute(". ${stdenv}/setup; autoPatchelf bin/makewad"); os.execute_in_dir( "makewad", "bin" )'
+            --replace-fail 'os.execute_in_dir( "makewad", "bin" )' 'os.execute("${stdenv.shell} -c \". ${stdenv}/setup; autoPatchelf bin/makewad\""); os.execute_in_dir( "makewad", "bin" )'
         ''}
         substituteInPlace "$FPCVALKYRIE_ROOT"/libs/vlualibrary.pas \
             --replace-fail 'lua5.1.${libExt}' '${lib.getLib lua5_1}/lib/liblua.5.1.${libExt}'
