@@ -95,8 +95,8 @@ in stdenv.mkDerivation rec {
     installPhase = ''
         runHook preInstall
         mkdir -p "$out"/share/drl
-        cp bin/drl "$out"/share/drl/drl
         for file in \
+            drl \
             backup \
             mortem \
             screenshot \
