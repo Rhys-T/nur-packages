@@ -21,7 +21,7 @@
         paths = [fpc];
         nativeBuildInputs = [makeBinaryWrapper];
         postBuild = ''
-            wrapProgram "$out"/bin/fpc --add-flags '-FD${lib.getBin stdenv.cc}/bin'${lib.optionalString stdenv.isLinux " --add-flags '-va'"}
+            wrapProgram "$out"/bin/fpc --add-flags '-FD${lib.getBin stdenv.cc}/bin'$
         '';
     };
 in stdenv.mkDerivation rec {
@@ -54,6 +54,10 @@ in stdenv.mkDerivation rec {
                 mod = mod,
             }
         end)()"
+    '' + lib.optionalString stdenv.isLinux ''
+        substituteInPlace "$FPCVALKYRIE_ROOT"/scripts/lua_make.lua \
+            --replace-fail '-v0' '-va'
+    '' + ''
         substituteInPlace "$FPCVALKYRIE_ROOT"/libs/vlualibrary.pas \
             --replace-fail 'lua5.1.${libExt}' '${lib.getLib lua5_1}/lib/liblua.5.1.${libExt}'
         substituteInPlace "$FPCVALKYRIE_ROOT"/libs/vsdl2library.pas \
