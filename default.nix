@@ -35,7 +35,7 @@ in {
     
     maintainers = import ./maintainers.nix;
     
-    lix-game-packages = callPackage ./pkgs/lix-game {};
+    lix-game-packages = callPackage ./pkgs/lix-game/packages.nix {};
     lix-game = self.lix-game-packages.game;
     lix-game-server = self.lix-game-packages.server;
     lix-game-libpng = if pkgs.hostPlatform.isDarwin then (self.lix-game-packages.overrideScope (self: super: {
