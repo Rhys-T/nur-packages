@@ -21,7 +21,7 @@
         paths = [fpc];
         nativeBuildInputs = [makeBinaryWrapper];
         postBuild = ''
-            wrapProgram "$out"/bin/fpc --add-flags '-FD${lib.getBin stdenv.cc}/bin'$
+            wrapProgram "$out"/bin/fpc --add-flags '-FD${lib.getBin stdenv.cc}/bin'
         '';
     };
 in stdenv.mkDerivation rec {
