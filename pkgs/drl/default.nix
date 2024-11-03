@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, drl-unwrapped, drl-audio, drl-icon, makeDesktopItem, copyDesktopItems, desktopToDarwinBundle, coreutils }: let
+{ stdenvNoCC, lib, drl-unwrapped, drl-audio, drl-icon, makeDesktopItem, copyDesktopItems, desktopToDarwinBundle, bash, coreutils }: let
     wrongAudioSuffix = if drl-audio.audioQuality == "hq" then "" else "hq";
 in stdenvNoCC.mkDerivation {
     pname = "drl-${drl-audio.audioQuality}";
@@ -8,7 +8,7 @@ in stdenvNoCC.mkDerivation {
     unwrapped = drl-unwrapped;
     audio = drl-audio;
     icon = drl-icon;
-    inherit coreutils;
+    inherit bash coreutils;
     desktopItems = [(makeDesktopItem {
         name = "drl";
         desktopName = "DRL";
