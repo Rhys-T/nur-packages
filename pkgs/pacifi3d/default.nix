@@ -67,6 +67,7 @@ in stdenv.mkDerivation rec {
     ];
     buildFlags = ["common"] ++ lib.optional stdenv.isDarwin ".bundle";
     installPhase = ''
+        runHook preInstall
         mkdir -p "$out"/bin
         ${if stdenv.isDarwin then ''
             mkdir -p "$out"/Applications
@@ -75,6 +76,7 @@ in stdenv.mkDerivation rec {
         '' else ''
             cp pacifi3d "$out/bin/pacifi3d$suffix"
         ''}
+        runHook postInstall
     '';
     meta = {
         description = "Pac-Man emulator in 3D" + lib.optionalString (romsFromXML != null) " (using ROMsets from ${romSourcePname})";

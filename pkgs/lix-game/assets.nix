@@ -12,15 +12,17 @@ in stdenvNoCC.mkDerivation {
     nativeBuildInputs = lib.optionals convertImagesToTrueColor ([imagemagick] ++ lib.optionals enableParallelBuilding [parallel]);
     inherit enableParallelBuilding;
     postPatch = ''
-    rm -r data/desktop
-    '' + lib.optionalString convertImagesToTrueColor ''
-    echo 'Converting all game images to PNG32 to work around <https://github.com/SimonN/LixD/issues/431>...'
-    find images/ data/images/ -name \*.png ${if enableParallelBuilding then "-print0 | parallel --no-notice -0 -j$NIX_BUILD_CORES" else "-exec"} magick {} PNG32:{} \;
-    echo 'Done.'
+        rm -r data/desktop
+        '' + lib.optionalString convertImagesToTrueColor ''
+        echo 'Converting all game images to PNG32 to work around <https://github.com/SimonN/LixD/issues/431>...'
+        find images/ data/images/ -name \*.png ${if enableParallelBuilding then "-print0 | parallel --no-notice -0 -j$NIX_BUILD_CORES" else "-exec"} magick {} PNG32:{} \;
+        echo 'Done.'
     '';
     installPhase = ''
-    mkdir -p "$out"/share/lix
-    cp -r data images levels "$out"/share/lix/
+        runHook preInstall
+        mkdir -p "$out"/share/lix
+        cp -r data images levels "$out"/share/lix/
+        runHook postInstall
     '';
     preferLocalBuild = !convertImagesToTrueColor;
     outputHash = hash;

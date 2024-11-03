@@ -39,7 +39,9 @@ in stdenvNoCC.mkDerivation {
         runHook postInstall
     '';
     installCheckPhase = ''
+        runHook preInstallCheck
         ${lib.getExe shellcheck} "$out"/bin/drl
+        runHook postInstallCheck
     '';
     doInstallCheck = true;
     meta = drl-unwrapped.meta // {
