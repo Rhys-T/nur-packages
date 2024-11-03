@@ -14,8 +14,9 @@
     postUnpack = ''
         unpackFile "$debian"
     '';
-    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    postPatch = ''
         substituteInPlace ../debian/powder.desktop --replace-fail '/usr/games/powder' "$out/bin/powder"
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
         substituteInPlace port/mac/Makefile --replace-fail 'SDLMain.o' '''
         substituteInPlace make/makerules.OSX \
             --replace-fail '-I/Library/Frameworks/SDL.framework/Headers' '$(shell sdl-config --cflags)' \
