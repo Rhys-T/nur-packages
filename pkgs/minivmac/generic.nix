@@ -75,13 +75,13 @@ let
             buildInputs = lib.optionals hostPlatform.isLinux [ xorg.libX11 ] ++ lib.optionals hostPlatform.isDarwin [ Cocoa ];
             installPhase = ''
                 runHook preInstall
-            '' + if stdenv.isLinux then ''
-                mkdir -p "$out/bin"
-                cp minivmac "$out/bin/$pname"
-            '' else ''
+            '' + if hostPlatform.isDarwin then ''
                 mkdir -p "$out/Applications" "$out/bin"
                 cp -r "minivmac.app" "$out/Applications/$pname.app"
                 makeWrapper "$out/Applications/$pname.app/Contents/MacOS/minivmac" "$out/bin/$pname"
+            '' else ''
+                mkdir -p "$out/bin"
+                cp minivmac "$out/bin/$pname"
             '' + ''
                 runHook postInstall
             '';
