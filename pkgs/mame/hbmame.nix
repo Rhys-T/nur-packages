@@ -52,7 +52,8 @@
     ] [
         "install -Dm755 hbmame -t $out/bin"
         "{artwork,bgfx,plugins,language,ctrlr,hash}" # no keymaps included with HBMAME
-    ] installPhase' + ''
+    ] installPhase';
+    postInstall = (old.postInstall or "") + ''
         mv "$out"/share/man/man6/{,hb}mame.6
     '';
     env = (old.env or {}) // {
