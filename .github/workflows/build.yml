@@ -103,7 +103,7 @@ jobs:
     #   if: '!cancelled()'
     #   uses: actions/upload-artifact@v4
     #   with:
-    #     name: Rhys-T-nur-packages-debug-${{ matrix.runner }}-${{ matrix.nixpkgs }}
+    #     name: Rhys-T-nur-packages-debug-${{ matrix.runner }}-${{ matrix.nixpkgs }}-${{ matrix.subset }}
     #     path: |
     #       /nix/store/*drl-unwrapped*.drv
     #       /nix/store/*drl-env-test*
