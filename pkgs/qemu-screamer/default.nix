@@ -74,8 +74,7 @@ stdenv.mkDerivation rec {
     pkg-config flex bison meson ninja perl
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    # SCREAMER: added `distutils` since it's no longer builtin
-    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme python3Packages.distutils
+    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
   ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
