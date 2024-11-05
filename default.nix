@@ -120,6 +120,12 @@ in {
     drl-packages = callPackage ./pkgs/drl/packages.nix {};
     inherit (self.drl-packages) drl drl-hq drl-lq;
     
+    qemu-screamer = callPackage (pkgs.callPackage ./pkgs/qemu-screamer {}) {
+        inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
+        inherit (pkgs.darwin.stubs) rez setfile;
+        inherit (pkgs.darwin) sigtool;
+    };
+    
     # Can't just pass `-L` to `nix-build-uncached`: it ends up being passed to both
     # old `nix-build` (which doesn't understand it) and new `nix build` (which does).
     nix-build-uncached-logging = callPackage ({nix-build-uncached}: nix-build-uncached.overrideAttrs (old: {
