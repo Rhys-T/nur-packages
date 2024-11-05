@@ -276,8 +276,8 @@ stdenv.mkDerivation rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    homepage = "http://www.qemu.org/";
-    # SCREAMER: updated description and added longDescription
+    # SCREAMER: updated homepage and description, and added longDescription
+    homepage = "https://github.com/mcayland/qemu/tree/screamer";
     description = "Generic and open source machine emulator and virtualizer (mcayland's 'screamer' fork)";
     longDescription = ''
       This is mcayland's 'screamer' fork of QEMU, with flaky-but-functional support 
@@ -286,6 +286,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     mainProgram = "qemu-kvm";
+    # SCREAMER: updated maintainers
     maintainers = with maintainers; [ Rhys-T ];
     platforms = platforms.unix;
     priority = 10; # Prefer virtiofsd from the virtiofsd package.
