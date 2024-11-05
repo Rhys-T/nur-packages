@@ -120,7 +120,8 @@ in {
     drl-packages = callPackage ./pkgs/drl/packages.nix {};
     inherit (self.drl-packages) drl drl-hq drl-lq;
     
-    qemu-screamer = callPackage (pkgs.callPackage ./pkgs/qemu-screamer {}) {
+    # qemu-screamer-nixpkgs = callPackage ./pkgs/qemu-screamer/nixpkgs.nix {};
+    qemu-screamer = callPackage ./pkgs/qemu-screamer {
         inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
         inherit (pkgs.darwin.stubs) rez setfile;
         inherit (pkgs.darwin) sigtool;
