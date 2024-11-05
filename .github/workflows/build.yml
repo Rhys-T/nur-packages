@@ -42,6 +42,7 @@ jobs:
             [
               "base",
               "hbmame",
+              "qemu-screamer",
             empty] as $subsets |
             
             {include: [
