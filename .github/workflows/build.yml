@@ -55,7 +55,8 @@ jobs:
               (if $qemuSystem then {
                 "aarch64-linux": "arm64",
               }[$qemuSystem] else null end) as $qemuSystemForAction |
-              (if $qemuSystem then $subsets[] else "all" end) as $subset |
+              # (if $qemuSystem then $subsets[] else "all" end) as $subset |
+              $subsets[] as $subset |
               select(($runner | startswith("macos")) or ($subset != "mame")) |
               {$displayRunner, $runner, $qemuSystem, $qemuSystemForAction, $nixpkgs, $subset, $nurRepo, $cachixName}
             ]} |
