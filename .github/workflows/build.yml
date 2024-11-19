@@ -90,7 +90,6 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          sandbox = true
           ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem)}}
     - name: Show nixpkgs version
       run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
