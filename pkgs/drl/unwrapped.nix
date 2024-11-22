@@ -16,9 +16,14 @@
         rev = "0_9_0a";
         hash = "sha256-R/FgbmT7pvw9Qn0a7uR/Hw4pEQ2mArZY6sqXShQWU1Q=";
     };
+    fpc' = if stdenv.hostPlatform.isDarwin then fpc.overrideAttrs (old: {
+        env = (old.env or {}) // {
+            NIX_DEBUG = 7;
+        };
+    }) else fpc;
     fpc-wrapper = symlinkJoin {
         name = "${lib.getName fpc}-wrapper-${lib.getVersion fpc}";
-        paths = [fpc];
+        paths = [fpc'];
         nativeBuildInputs = [makeBinaryWrapper];
         postBuild = ''
             wrapProgram "$out"/bin/fpc --add-flags '-FD${lib.getBin stdenv.cc}/bin'
