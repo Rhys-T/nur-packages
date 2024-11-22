@@ -31,7 +31,7 @@ jobs:
               # "Linux x86-64/ubuntu-latest",
               # "Linux ARM64/ubuntu-latest+qemu-aarch64-linux",
               "macOS x86-64/macos-13",
-              "macOS ARM64/macos-latest",
+              # "macOS ARM64/macos-latest",
             empty] as $runners |
             
             [
@@ -42,9 +42,9 @@ jobs:
             
             [
               "base",
-              "mame",
-              "hbmame",
-              "qemu-screamer",
+              # "mame",
+              # "hbmame",
+              # "qemu-screamer",
             empty] as $subsets |
             
             {include: [
