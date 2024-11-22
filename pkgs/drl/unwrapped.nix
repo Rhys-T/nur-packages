@@ -23,7 +23,7 @@
     }) else fpc;
     fpc-wrapper = symlinkJoin {
         name = "${lib.getName fpc}-wrapper-${lib.getVersion fpc}";
-        paths = [fpc'];
+        paths = [fpc];
         nativeBuildInputs = [makeBinaryWrapper];
         postBuild = ''
             wrapProgram "$out"/bin/fpc --add-flags '-FD${lib.getBin stdenv.cc}/bin'
