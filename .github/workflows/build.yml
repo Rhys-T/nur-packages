@@ -38,9 +38,10 @@ jobs:
               # "nixpkgs-unstable",
               # "nixos-unstable",
               # "nixos-24.05",
-              "b2a0e3125e8b373ee2d6480ebd3b8f5c20080796",
-              "a061b02a6fc13985524e3fb5bf1da25b950d42ef",
-              "38835c82566164a08de5b95531a65ca4a261ec1b",
+              # "b2a0e3125e8b373ee2d6480ebd3b8f5c20080796", # BAD
+              # "a061b02a6fc13985524e3fb5bf1da25b950d42ef", # BAD
+              # "38835c82566164a08de5b95531a65ca4a261ec1b", # ???
+              "a3600c078838e7178c1cf34c9168323503a8e7be",
             empty] as $nixpkgss |
             
             [
