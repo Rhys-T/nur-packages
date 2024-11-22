@@ -31,6 +31,8 @@ let
     hbmame = p: lib.hasInfix "hbmame" (p.name or "");
     mame = p: lib.hasInfix "mame" (p.name or "") && !(subsets.hbmame p);
     qemu-screamer = p: lib.hasInfix "qemu" (p.name or "") && lib.hasInfix "screamer" (p.name or "");
+    
+    TEST = p: lib.hasInfix "drl" (p.name or "");
   };
   subset = subsets.${subsetName};
   isReserved = n: n == "lib" || n == "overlays" || n == "modules";

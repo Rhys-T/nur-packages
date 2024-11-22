@@ -44,10 +44,11 @@ jobs:
             empty] as $nixpkgss |
             
             [
-              "base",
+              # "base",
               # "mame",
               # "hbmame",
               # "qemu-screamer",
+              "TEST",
             empty] as $subsets |
             
             {include: [
