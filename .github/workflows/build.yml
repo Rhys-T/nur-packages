@@ -99,8 +99,6 @@ jobs:
           ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem)}}
     - name: Show nixpkgs version
       run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
-    - name: Dump nix-info
-      run: nix-shell -p nix-info --run "nix-info -m" | tee /tmp/nix-info.txt
     - name: Setup cachix
       uses: cachix/cachix-action@v15
       # Don't replace <YOUR_CACHIX_NAME> here!
@@ -110,6 +108,8 @@ jobs:
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
         skipPush: true
+    - name: Dump nix-info
+      run: nix-shell -p nix-info --run "nix-info -m" | tee /tmp/nix-info.txt
     - name: Check evaluation
       run: |
         nix-env -f . -qa \* --meta --xml \
