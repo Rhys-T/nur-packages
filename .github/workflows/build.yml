@@ -129,6 +129,7 @@ jobs:
         name: Rhys-T-nur-packages-build-logs-${{ matrix.runner }}${{ matrix.qemuSystem && format('+qemu-{0}', matrix.qemuSystem) }}-${{ matrix.nixpkgs }}-${{ matrix.subset }}
         path: |
           /tmp/nix-info.txt
+          /nix/store/*-fpc*.drv
           /nix/var/log
           !/nix/var/log/nix/drvs/*/*user-environment*
         if-no-files-found: ignore
