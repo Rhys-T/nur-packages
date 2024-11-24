@@ -27,10 +27,10 @@ jobs:
             "rhys-t" as $cachixName |
             
             [
-              "Linux x86-64/ubuntu-latest",
-              "Linux ARM64/ubuntu-latest+qemu-aarch64-linux",
-              "macOS x86-64/macos-13",
-              "macOS ARM64/macos-latest",
+              "Lnx x64/ubuntu-latest",
+              "Lnx A64/ubuntu-latest+qemu-aarch64-linux",
+              "Mac x64/macos-13",
+              "Mac A64/macos-latest",
             empty] as $runners |
             
             [
@@ -58,7 +58,12 @@ jobs:
               # (if $qemuSystem then $subsets[] else "all" end) as $subset |
               $subsets[] as $subset |
               select(($runner | startswith("macos")) or ($subset != "mame")) |
-              {$displayRunner, $runner, $qemuSystem, $qemuSystemForAction, $nixpkgs, $subset, $nurRepo, $cachixName}
+              ($nixpkgs |
+                gsub("^nixpkgs-"; "NP-") |
+                gsub("^nixos-"; "NO-") |
+                gsub("-unstable$"; "-U") |
+              .) as $displayNixpkgs |
+              {$displayRunner, $runner, $qemuSystem, $qemuSystemForAction, $displayNixpkgs, $nixpkgs, $subset, $nurRepo, $cachixName}
             ]} |
             
             @json "matrix=\(.)"
@@ -69,7 +74,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.define-matrix.outputs.matrix) }}
       fail-fast: false
-    name: ${{ matrix.displayRunner }} - ${{ matrix.nixpkgs }} - ${{ matrix.subset }}
+    name: ${{ matrix.displayRunner }} ${{ matrix.displayNixpkgs }} ${{ matrix.subset }}
     runs-on: ${{ matrix.runner }}
     outputs:
       nurRepo: ${{ steps.build.outputs.nurRepo }}
