@@ -104,6 +104,8 @@ in {
     
     powder = callPackage ./pkgs/powder {};
     
+    xinvaders3d = callPackage ./pkgs/xinvaders3d {};
+    
     icbm3d = pkgs.icbm3d.overrideAttrs (old: {
         postPatch = (old.postPatch or "") + ''
             substituteInPlace makefile --replace-fail 'CC=' '#CC='
@@ -113,6 +115,16 @@ in {
         '';
         meta = old.meta // {
             description = "${old.meta.description or "icbm3d"} (fixed for macOS/Darwin)";
+            platforms = old.meta.platforms ++ pkgs.lib.platforms.darwin;
+        };
+    });
+    
+    xgalagapp = pkgs.xgalagapp.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+            substituteInPlace Makefile --replace-fail 'CXX =' '#CXX ='
+        '';
+        meta = old.meta // {
+            description = "${old.meta.description or "xgalagapp"} (fixed for macOS/Darwin)";
             platforms = old.meta.platforms ++ pkgs.lib.platforms.darwin;
         };
     });
