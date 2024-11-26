@@ -130,7 +130,9 @@ in {
     });
     
     fpc = pkgs.fpc.overrideAttrs (old: {
-        makeFlags = (old.makeFlags or []) ++ pkgs.lib.optionals pkgs.hostPlatform.isDarwin ["SYSROOTPATH=/"];
+        preBuild = (old.preBuild or "") + ''
+            makeFlagsArray+=(FPCOPT+="-FD${pkgs.lib.getBin pkgs.stdenv.cc}/bin -XR/")
+        '';
         meta = old.meta // {
             description = "${old.meta.description or "fpc"} (fixed for macOS/Darwin)";
             platforms = old.meta.platforms ++ pkgs.lib.platforms.darwin;
