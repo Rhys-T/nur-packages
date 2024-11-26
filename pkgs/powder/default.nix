@@ -36,7 +36,10 @@
     '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # Build app bundle
         pushd port/mac
-        sed -E '/Building a DMG/ Q' builddmg.sh | bash
+        sed -E '
+            /SDL\.framework/ d
+            /Building a DMG/ Q
+        ' builddmg.sh | bash
         popd
     '' + ''
         runHook postBuild
