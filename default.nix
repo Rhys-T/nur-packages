@@ -129,6 +129,14 @@ in {
         };
     });
     
+    fpc = pkgs.fpc.overrideAttrs (old: {
+        makeFlags = (old.makeFlags or []) ++ pkgs.lib.optionals pkgs.hostPlatform.isDarwin ["SYSROOTPATH=/"];
+        meta = old.meta // {
+            description = "${old.meta.description or "fpc"} (fixed for macOS/Darwin)";
+            platforms = old.meta.platforms ++ pkgs.lib.platforms.darwin;
+        };
+    });
+    
     drl-packages = callPackage ./pkgs/drl/packages.nix {};
     inherit (self.drl-packages) drl drl-hq drl-lq;
     
