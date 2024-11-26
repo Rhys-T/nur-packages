@@ -21,7 +21,8 @@
         substituteInPlace make/makerules.OSX \
             --replace-fail '-I/Library/Frameworks/SDL.framework/Headers' '$(shell sdl-config --cflags)' \
             --replace-fail '-framework SDL' '$(shell sdl-config --libs)' \
-            --replace-fail '-mmacosx-version-min=10.5' '''
+            --replace-fail '-mmacosx-version-min=10.5' ''' \
+            --replace-fail '-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk' '''
     '';
     buildPhase = ''
         runHook preBuild
