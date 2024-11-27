@@ -152,7 +152,7 @@ in {
             echo ']]]]]]]]]]]]]]]]]]]]]] Store paths in env containing libc'
             echo '[[[[[[[[[[[[[[[[[[[[[[ env lines containing those paths'
             env | grep -Eoz '/nix/store/[0-9a-z]{32}-[-.+_?=0-9a-zA-Z]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$' | while IFS= read -r line; do
-                env | grep -F "$line"
+                env | grep -F "$line" || true
             done | sort | uniq
             echo ']]]]]]]]]]]]]]]]]]]]]] env lines containing those paths'
             # exit 1
