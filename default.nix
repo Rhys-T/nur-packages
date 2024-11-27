@@ -106,6 +106,18 @@ in {
     
     xinvaders3d = callPackage ./pkgs/xinvaders3d {};
     
+    TEST = pkgs.stdenv.mkDerivation {
+        name = "TEST";
+        dontUnpack = true;
+        buildPhase = ''
+            clang -otestbin -x c -Wl,-t - <<< $'#include <stdio.h>\nint main() { printf("hello\\n"); return 0; }' | tee test.log
+        '';
+        installPhase = ''
+            install -Dm755 testbin $out/bin/testbin
+            install -Dm644 test.log $out/share/TEST/test.log
+        '';
+    };
+    
     icbm3d = pkgs.icbm3d.overrideAttrs (old: {
         postPatch = (old.postPatch or "") + ''
             substituteInPlace makefile --replace-fail 'CC=' '#CC='
@@ -132,6 +144,9 @@ in {
     fpc = pkgs.fpc.overrideAttrs (old: {
         preBuild = (old.preBuild or "") + ''
             makeFlagsArray+=(FPCOPT+="-FD${pkgs.lib.getBin pkgs.stdenv.cc}/bin -XR/")
+            env | grep -Eo '/nix/store/[^/]+' | sort | uniq || true
+            env | grep -Eo '/nix/store/[^/]+' | sort | uniq | xargs ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$'
+            exit 1
         '';
         NIX_LDFLAGS = (old.NIX_LDFLAGS or "") + " -t";
         meta = old.meta // {
