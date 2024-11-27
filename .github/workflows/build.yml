@@ -40,9 +40,6 @@ jobs:
               # "nixos-24.05",
               # "nixos-24.11",
               "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc",
-              
-              "514b00cf08702b31cdf873a798f1ff100d4f2cf7",
-              "65f010f6b9eb220dec2fee908737a0e02bda19d4",
             empty] as $nixpkgss |
             
             [
