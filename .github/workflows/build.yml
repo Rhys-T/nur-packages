@@ -130,6 +130,9 @@ jobs:
     - name: Build nix packages
       id: build
       run: ${{ startsWith(matrix.runner, 'macos') && 'trap ''mv /Applications/{hidden-,}Xcode.app; sudo mv /Library/{hidden-,}Developer; '' EXIT; mv /Applications/{,hidden-}Xcode.app; sudo mv /Library/{,hidden-}Developer; ' || '' }}nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached ci.nix -build-flags '-L --keep-going' ${{ matrix.qemuSystem && format('--argstr platform {0}', matrix.qemuSystem) }} --argstr subsetName ${{ matrix.subset }} -A cacheOutputs
+    - name: Find libc
+      if: '!cancelled()'
+      run: nix-shell -p fd --command $'fd \'libc\\.(tbd|dylib)$\' /nix/store'
     - name: Upload build logs
       if: '!cancelled()'
       uses: actions/upload-artifact@v4
