@@ -150,12 +150,17 @@ in {
             echo '[[[[[[[[[[[[[[[[[[[[[[ Store paths in env containing libc'
             env | grep -Eoz '/nix/store/[0-9a-z]{32}-[-.+_?=0-9a-zA-Z]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$'
             echo ']]]]]]]]]]]]]]]]]]]]]] Store paths in env containing libc'
-            echo '[[[[[[[[[[[[[[[[[[[[[[ env lines containing those paths'
-            env | grep -Eoz '/nix/store/[0-9a-z]{32}-[-.+_?=0-9a-zA-Z]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$' | while IFS= read -r line; do
-                env | grep -F "$line" || true
-            done | sort | uniq
-            echo ']]]]]]]]]]]]]]]]]]]]]] env lines containing those paths'
-            # exit 1
+            # echo '[[[[[[[[[[[[[[[[[[[[[[ env lines containing those paths'
+            # set -x
+            # env | grep -Eoz '/nix/store/[0-9a-z]{32}-[-.+_?=0-9a-zA-Z]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$' | while IFS= read -r line; do
+            #     env | grep -F "$line" || true
+            # done | sort | uniq
+            # set +x
+            # echo ']]]]]]]]]]]]]]]]]]]]]] env lines containing those paths'
+            echo '[[[[[[[[[[[[[[[[[[[[[[ env lines containing apple-sdk'
+            env | grep -E '/nix/store/[0-9a-z]{32}-apple-sdk[-.+_?=0-9a-zA-Z]+'
+            echo ']]]]]]]]]]]]]]]]]]]]]] env lines containing apple-sdk'
+            exit 1
         '';
         NIX_LDFLAGS = (old.NIX_LDFLAGS or "") + " -t";
         meta = old.meta // {
