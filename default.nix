@@ -146,7 +146,7 @@ in {
             makeFlagsArray+=(FPCOPT+="-FD${pkgs.lib.getBin pkgs.stdenv.cc}/bin -XR/")
             env | grep -Eo '/nix/store/[0-9a-z]{32}-[^/]+' | sort | uniq || true
             echo -E '-----------------'
-            env | grep -EoZ '/nix/store/[0-9a-z]{32}-[^/]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$'
+            env | grep -Eoz '/nix/store/[0-9a-z]{32}-[^/]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$'
             exit 1
         '';
         NIX_LDFLAGS = (old.NIX_LDFLAGS or "") + " -t";
