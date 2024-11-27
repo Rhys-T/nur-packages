@@ -144,10 +144,18 @@ in {
     fpc = pkgs.fpc.overrideAttrs (old: {
         preBuild = (old.preBuild or "") + ''
             makeFlagsArray+=(FPCOPT+="-FD${pkgs.lib.getBin pkgs.stdenv.cc}/bin -XR/")
+            echo '[[[[[[[[[[[[[[[[[[[[[[ All store paths in env'
             env | grep -Eo '/nix/store/[0-9a-z]{32}-[-.+_?=0-9a-zA-Z]+' | sort | uniq || true
-            echo -E '-----------------'
+            echo -E ']]]]]]]]]]]]]]]]]]]]]] All store paths in env'
+            echo '[[[[[[[[[[[[[[[[[[[[[[ Store paths in env containing libc'
             env | grep -Eoz '/nix/store/[0-9a-z]{32}-[-.+_?=0-9a-zA-Z]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$'
-            exit 1
+            echo ']]]]]]]]]]]]]]]]]]]]]] Store paths in env containing libc'
+            echo '[[[[[[[[[[[[[[[[[[[[[[ env lines containing those paths'
+            env | grep -Eoz '/nix/store/[0-9a-z]{32}-[-.+_?=0-9a-zA-Z]+' | xargs -0 ${pkgs.lib.getExe pkgs.fd} 'libc\.(tbd|dylib)$' | while IFS= read -r line; do
+                env | grep -F "$line"
+            done | sort | uniq
+            echo ']]]]]]]]]]]]]]]]]]]]]] env lines containing those paths'
+            # exit 1
         '';
         NIX_LDFLAGS = (old.NIX_LDFLAGS or "") + " -t";
         meta = old.meta // {
