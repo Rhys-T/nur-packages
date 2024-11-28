@@ -35,11 +35,11 @@ jobs:
             empty] as $runners |
             
             [
-              "nixpkgs-unstable",
+              # "nixpkgs-unstable",
               # "nixos-unstable",
               # "nixos-24.05",
               # "nixos-24.11",
-              "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc",
+              # "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc",
               "b75c70282f91276908adf0f286437eadbb638119",
               "514b00cf08702b31cdf873a798f1ff100d4f2cf7",
             empty] as $nixpkgss |
