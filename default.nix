@@ -162,13 +162,13 @@ in {
         #     echo ']]]]]]]]]]]]]]]]]]]]]] env lines containing apple-sdk'
         #     exit 1
         # '';
-        postPatch = (old.postPatch or "") + ''
-            NIX_LDFLAGS+=" -F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
-            NIX_LDFLAGS+=" -L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib"
-        #     NIX_CFLAGS_COMPILE+=" -isysroot $SDKROOT"
-        #     NIX_CFLAGS_COMPILE+=" -idirafter $SDKROOT/usr/include"
-        #     NIX_CFLAGS_COMPILE+=" -iframework $SDKROOT/System/Library/Frameworks"
-        # '';
+        # postPatch = (old.postPatch or "") + ''
+        #     NIX_LDFLAGS+=" -F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        #     NIX_LDFLAGS+=" -L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib"
+        # #     NIX_CFLAGS_COMPILE+=" -isysroot $SDKROOT"
+        # #     NIX_CFLAGS_COMPILE+=" -idirafter $SDKROOT/usr/include"
+        # #     NIX_CFLAGS_COMPILE+=" -iframework $SDKROOT/System/Library/Frameworks"
+        # # '';
         PS4 = "+(\${BASH_SOURCE}:\${LINENO}): \${FUNCNAME[0]:+\${FUNCNAME[0]}(): }";
         NIX_DEBUG = 7;
         NIX_LDFLAGS = (old.NIX_LDFLAGS or "") + " -t";
