@@ -65,6 +65,7 @@ jobs:
                 gsub("^nixpkgs-"; "NP-") |
                 gsub("^nixos-"; "NO-") |
                 gsub("-unstable$"; "-U") |
+                gsub("^(?<short>[0-9a-f]{8})[0-9a-f]{32}$"; "\(.short)") |
               .) as $displayNixpkgs |
               {$displayRunner, $runner, $qemuSystem, $qemuSystemForAction, $displayNixpkgs, $nixpkgs, $nixpkgsPath, $subset, $nurRepo, $cachixName}
             ]} |
