@@ -1,16 +1,17 @@
 name: "Build and populate cache"
 on:
   workflow_dispatch: # allows manual triggering
-  pull_request:
+  # pull_request:
   push:
     branches:
-      - main
-      - master
-  schedule:
-    # rebuild everyday at 3:30
-    # TIP: Choose a random time here so not all repositories are build at once:
-    # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
-    - cron:  '30 3 * * *'
+      # - main
+      # - master
+      - test
+  # schedule:
+  #   # rebuild everyday at 3:30
+  #   # TIP: Choose a random time here so not all repositories are build at once:
+  #   # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
+  #   - cron:  '30 3 * * *'
 jobs:
   define-matrix:
     name: Define job matrix
@@ -66,6 +67,7 @@ jobs:
                 gsub("-unstable$"; "-U") |
                 gsub("^(?<short>[0-9a-f]{8})[0-9a-f]{32}$"; "\(.short)") |
               .) as $displayNixpkgs |
+              select(($runner | startswith("macos")) and ($subset == "base")) |
               {$displayRunner, $runner, $qemuSystem, $qemuSystemForAction, $displayNixpkgs, $nixpkgs, $nixpkgsPath, $subset, $nurRepo, $cachixName}
             ]} |
             
