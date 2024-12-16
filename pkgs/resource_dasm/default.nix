@@ -49,9 +49,9 @@
             * Tools for specific formats
                 * **render_text**: Renders text using bitmap fonts from FONT or NFNT resources.
                 * **hypercard_dasm**: Disassembles HyperCard stacks and draws card images.
-                * **decode_data**: Decodes some custom compression formats (see below).
-                * **render_sprite**: Renders sprites from a variety of custom formats (see below).
-                * **icon_unarchiver**: Exports icons from an Icon Archiver archive to .icns (see below).
+                * **decode_data**: Decodes some custom compression formats (see README).
+                * **render_sprite**: Renders sprites from a variety of custom formats (see README).
+                * **icon_unarchiver**: Exports icons from an Icon Archiver archive to .icns (see README).
             * Game map generators
                 * **blobbo_render**: Generates maps from Blobbo levels.
                 * **bugs_bannis_render**: Generates maps from Bugs Bannis levels.
