@@ -1,4 +1,4 @@
-{stdenv, lib, zlib, cmake, memorymappingHook, phosg, netpbm, fetchFromGitHub, useNetpbm?false, makeBinaryWrapper, maintainers}: stdenv.mkDerivation rec {
+{stdenv, lib, zlib, cmake, memorymappingHook, phosg, netpbm, fetchFromGitHub, useNetpbm?false, ripgrep, makeBinaryWrapper, maintainers}: stdenv.mkDerivation rec {
     pname = "resource_dasm";
     version = "0-unstable-2024-12-11";
     src = fetchFromGitHub {
@@ -9,6 +9,23 @@
     };
     nativeBuildInputs = [cmake] ++ lib.optionals useNetpbm [makeBinaryWrapper];
     buildInputs = [phosg zlib] ++ lib.optionals stdenv.hostPlatform.isDarwin [memorymappingHook];
+    # The CMakeLists.txt file provided doesn't install all the executables. Patch it to include the rest:
+    postPatch = ''
+        allExes=($(sed -En '
+            /.*add_executable\(([-_A-Za-z0-9]+).*/ {
+                s//\1/
+                p
+            }
+            /.*foreach\(ExecutableName IN ITEMS (.*)\).*$/ {
+                s//\1/
+                p
+            }
+        ' CMakeLists.txt))
+        for exeToInstall in "''${allExes[@]}"; do
+            installLine="install(TARGETS $exeToInstall DESTINATION bin)"
+            ${lib.getExe ripgrep} -Fq "$installLine" CMakeLists.txt || echo "$installLine" >> CMakeLists.txt
+        done
+    '';
     ${if useNetpbm then "postInstall" else null} = ''
         for file in "$out"/bin/*; do
             wrapProgram "$file" --prefix PATH : ${lib.makeBinPath [netpbm]}
