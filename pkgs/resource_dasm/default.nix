@@ -65,6 +65,9 @@
         '';
         homepage = "https://github.com/fuzziqersoftware/resource_dasm";
         license = lib.licenses.mit;
+        broken = let
+            memorymapping = builtins.elemAt memorymappingHook.propagatedBuildInputs 0;
+        in stdenv.hostPlatform.isDarwin && memorymapping.meta.broken;
         maintainers = [maintainers.Rhys-T];
     };
     passthru._Rhys-T.flakeApps = rdName: resource_dasm: let

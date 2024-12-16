@@ -35,6 +35,9 @@
         '';
         homepage = "https://github.com/fuzziqersoftware/phosg";
         license = lib.licenses.mit;
+        broken = let
+            memorymapping = builtins.elemAt memorymappingHook.propagatedBuildInputs 0;
+        in stdenv.hostPlatform.isDarwin && memorymapping.meta.broken;
         maintainers = [maintainers.Rhys-T];
     };
 }
