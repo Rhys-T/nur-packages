@@ -192,6 +192,9 @@ in {
     }));
     fetchzipRhys-T = pkgs.fetchzip.override { fetchurl = self.fetchurlRhys-T; };
     
+    phosg = callPackage ./pkgs/resource_dasm/phosg.nix {};
+    resource_dasm = callPackage ./pkgs/resource_dasm {};
+    
     # _ciOnly.dev = pkgs.lib.optionalAttrs (pkgs.hostPlatform.system == "x86_64-darwin") (pkgs.lib.recurseIntoAttrs {
     #     checkpoint = pkgs.lib.recurseIntoAttrs (pkgs.lib.mapAttrs (k: pkgs.checkpointBuildTools.prepareCheckpointBuild) {
     #         inherit (self)
