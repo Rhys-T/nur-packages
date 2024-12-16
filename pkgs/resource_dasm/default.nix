@@ -1,4 +1,4 @@
-{stdenv, lib, zlib, cmake, memorymappingHook, phosg, netpbm, fetchFromGitHub, useNetpbm?false, ripgrep, makeBinaryWrapper, maintainers}: stdenv.mkDerivation rec {
+{stdenv, lib, zlib, cmake, memorymappingHook, phosg, netpbm, fetchFromGitHub, useNetpbm?false, ripgrep, makeBinaryWrapper, maintainers}: stdenv.mkDerivation (finalAttrs: rec {
     pname = "resource_dasm";
     version = "0-unstable-2024-12-11";
     src = fetchFromGitHub {
@@ -67,4 +67,16 @@
         license = lib.licenses.mit;
         maintainers = [maintainers.Rhys-T];
     };
-}
+    passthru._Rhys-T.flakeApps = rdName: resource_dasm: let
+        lines = lib.splitString "\n" finalAttrs.finalPackage.meta.longDescription;
+        matchInfo = map (builtins.match "    \\* \\*\\*([^*]+)\\*\\*.*") lines;
+        actualMatches = builtins.filter (x: x != null) matchInfo;
+        flakeApps = builtins.listToAttrs (map (x: rec {
+            name = (builtins.elemAt x 0);
+            value = {
+                type = "app";
+                program = lib.getExe' resource_dasm name;
+            };
+        }) actualMatches);
+    in flakeApps;
+})
