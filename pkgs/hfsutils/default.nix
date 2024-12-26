@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = lib.optionals enableTclTk [tcl tk];
   configureFlags = [(lib.withFeatureAs enableTclTk "tcl" "${tcl}") (lib.withFeatureAs enableTclTk "tk" "${tk}")];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && enableTclTk) "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableTclTk "-Wno-error=incompatible-${lib.optionalString stdenv.cc.isClang "function-"}pointer-types";
 
   srcs = [
     # Actual source
