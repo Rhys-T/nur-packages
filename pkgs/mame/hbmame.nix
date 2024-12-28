@@ -48,7 +48,7 @@
                 install -Dm644 hbmame_1_32x32x32.png "$out"/share/icons/hicolor/32x32/apps/hbmame.png
                 ${builtins.elemAt installPhaseParts 1}
             '';
-            installPhaseParts' = builtins.match "(.*)# mame-tools.*mv \\$tools/bin/\\{,mame-\\}split(.*)" installPhase';
+            installPhaseParts' = builtins.match "(.*)# mame-tools.*mv \\$tools/bin/[{],mame-[}]split(.*)" installPhase';
             installPhase'' = lib.concatStrings installPhaseParts';
         in builtins.replaceStrings [
             "install -Dm755 mame -t $out/bin"
