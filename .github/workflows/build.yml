@@ -94,7 +94,7 @@ jobs:
     - name: Install nix
       uses: cachix/install-nix-action@v30
       with:
-        install_url: https://github.com/NixOS/nix/actions/runs/12675416869/artifacts/2402767170
+        install_url: https://github.com/Rhys-T/nur-packages/raw/1f7dcec1326b540172d412f79016aae7c520c4c3/installer-darwin.zip
         nix_path: "nixpkgs=https://github.com/NixOS/nixpkgs/archive/${{ matrix.nixpkgsPath }}.tar.gz"
         extra_nix_config: |
           experimental-features = nix-command flakes
