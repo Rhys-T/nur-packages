@@ -225,6 +225,11 @@ stdenv.mkDerivation rec {
     for f in $out/bin/qemu-system-*; do
       wrapGApp $f
     done
+  ''
+  # SCREAMER: avoid tripping noBrokenSymlinks check (backported and tweaked from NixOS/nixpkgs bc002a4 and a0478f4)
+  + lib.optionalString finalAttrs.separateDebugInfo ''
+    # HACK: remove broken symlink created by hook
+    rm -f $debug/lib/debug/s390-{netboot,ccw}.img
   '';
   preBuild = "cd build";
 
