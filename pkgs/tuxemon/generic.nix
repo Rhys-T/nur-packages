@@ -33,7 +33,7 @@ in let
         postPatch = ''
             substituteInPlace neteria/core.py --replace-fail 'is not 0' '!= 0'
         '';
-        nativeBuildInputs = with python3Packages; [pip];
+        dependencies = with python3Packages; [rsa];
     };
     pyscroll = python3Packages.buildPythonPackage rec {
         pname = "pyscroll";
@@ -42,7 +42,6 @@ in let
             inherit pname version;
             hash = "sha256-GQIFGyCEN5/I22mfCgDSbV0g5o+Nw8RT316vOSsqbHA=";
         };
-        nativeBuildInputs = with python3Packages; [pip];
         dependencies = [pygame-ce'];
     };
     pygame-menu-ce = python3Packages.buildPythonPackage rec {
@@ -52,7 +51,6 @@ in let
             inherit pname version;
             hash = "sha256-p14PBkst5eKPVShIKX51WjU39IABdOXEZShAKhitYrg=";
         };
-        nativeBuildInputs = with python3Packages; [pip];
         dependencies = [pygame-ce'];
     };
     tuxemon = python3Packages.buildPythonApplication {
