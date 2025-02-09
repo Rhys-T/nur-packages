@@ -63,7 +63,16 @@ in let
             cbor
             neteria
             pillow
-            pygame-ce
+            # pygame-ce
+            (pygame-ce.overridePythonAttrs (old: {
+                postPatch = (old.postPatch or "") + lib.optionalString (
+                    (lib.versionAtLeast meson-python.version "0.17") &&
+                    !(lib.hasInfix "\"meson-python<=" (old.postPatch or ""))
+                ) ''
+                    substituteInPlace pyproject.toml \
+                        --replace-fail '"meson-python<=0.16.0",' '"meson-python",'
+                '';
+            }))
             pyscroll
             pytmx
             requests
