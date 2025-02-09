@@ -51,7 +51,7 @@ in let
             inherit pname version;
             hash = "sha256-p14PBkst5eKPVShIKX51WjU39IABdOXEZShAKhitYrg=";
         };
-        dependencies = with python3Packages; [pygame-ce' typing-extensions];
+        dependencies = with python3Packages; [pygame-ce' pyperclip typing-extensions];
     };
     tuxemon = python3Packages.buildPythonApplication {
         pname = "tuxemon";
