@@ -139,8 +139,6 @@ in let
                 mit # for tuxemon/lib/bresenham.py
             ];
             maintainers = [maintainers.Rhys-T];
-            # See <https://github.com/NixOS/nixpkgs/issues/380436>
-            broken = hostPlatform.isDarwin && (tests.stdenv.hooks or {})?no-broken-symlinks && !(lib.hasInfix "chmod" (timidity.postInstall or ""));
         };
     };
 in tuxemon

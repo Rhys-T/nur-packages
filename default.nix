@@ -8,6 +8,25 @@
 
 { pkgs ? import <nixpkgs> {} }:
 
+# Backported fixes from https://github.com/NixOS/nixpkgs/pull/380440
+# See <https://github.com/NixOS/nixpkgs/issues/380436>
+let pkgs' = pkgs; in
+let pkgs = if with pkgs'; hostPlatform.isDarwin && (tests.stdenv.hooks or {})?no-broken-symlinks && !(lib.hasInfix "chmod" (timidity.postInstall or "")) then
+    pkgs'.extend (self: super: {
+        timidity = super.timidity.overrideAttrs (old: {
+            instruments = old.instruments.overrideAttrs (old: {
+                urls = ["https://courses.cs.umbc.edu/pub/midia/instruments.tar.gz"];
+            });
+            postInstall = (old.postInstall or "") + ''
+                # All but one of the symlinks in the instruments tarball have their permissions set to 0000.
+                # This causes problems on systems like Darwin that actually use symlink permissions.
+                chmod -Rh u+rwX $out/share/timidity/
+            '';
+            dontRewriteSymlinks = null;
+        });
+    })
+else pkgs'; in
+
 let result = pkgs.lib.makeScope pkgs.newScope (self: let
     inherit (self) callPackage;
 in {

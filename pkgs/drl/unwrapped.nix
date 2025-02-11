@@ -129,7 +129,5 @@ in stdenv.mkDerivation rec {
     '';
     meta = drl-common.meta // {
         description = "${drl-common.meta.description} (game engine and core data)";
-        # See <https://github.com/NixOS/nixpkgs/issues/380436>
-        broken = stdenv.hostPlatform.isDarwin && (tests.stdenv.hooks or {})?no-broken-symlinks && !(lib.hasInfix "chmod" (timidity.postInstall or ""));
     };
 }
