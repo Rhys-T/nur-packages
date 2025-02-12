@@ -92,9 +92,7 @@ in stdenv.mkDerivation rec {
     '';
     configurePhase = ''
         runHook preConfigure
-        cp ${writeText "config.lua" ''
-            OS = "${if stdenv.hostPlatform.isDarwin then "MACOSX" else "LINUX"}"
-        ''} config.lua
+        echo "OS = \"${if stdenv.hostPlatform.isDarwin then "MACOSX" else "LINUX"}\"" > config.lua
         runHook postConfigure
     '';
     buildPhase = ''
