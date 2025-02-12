@@ -37,7 +37,6 @@ jobs:
             [
               "nixpkgs-unstable",
               "nixos-unstable",
-              "nixos-24.05",
               "nixos-24.11",
               "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc",
             empty] as $nixpkgss |
