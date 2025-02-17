@@ -3,8 +3,8 @@
     version = "3.2.3";
     src = fetchurl {
         urls = [
-            "mirror://sourceforge/${self.pname}/${self.pname}-${self.version}.tar.gz"
-            "https://ratrabbit.nl/downloads/${self.pname}/${self.pname}-${self.version}.tar.gz"
+            "mirror://sourceforge/xpenguins/xpenguins-${self.version}.tar.gz"
+            "https://ratrabbit.nl/downloads/xpenguins/xpenguins-${self.version}.tar.gz"
         ];
         hash = "sha256-NQ4TTiof8NuGA7F/nXRTA2z0ym/muhmrZQz4mnTmBPM=";
     };
