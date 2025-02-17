@@ -82,9 +82,10 @@ jobs:
     name: ${{ matrix.displayRunner }} ${{ matrix.displayNixpkgs }} ${{ matrix.subset }}
     runs-on: ${{ matrix.runner }}
     outputs:
-      nurRepo: ${{ steps.build.outputs.nurRepo }}
+      nurRepo: ${{ steps.nurRepo.outputs.nurRepo }}
     steps:
     - name: Output nurRepo for final job
+      id: nurRepo
       run: echo 'nurRepo=${{ matrix.nurRepo }}' >> "$GITHUB_OUTPUT"
     - name: Checkout repository
       uses: actions/checkout@v4
