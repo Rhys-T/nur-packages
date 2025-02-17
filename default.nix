@@ -232,6 +232,10 @@ in {
     tuxemon-git = callPackage ./pkgs/tuxemon/git.nix {};
     libShake = callPackage ./pkgs/libShake {};
     
+    xpenguins = callPackage ./pkgs/xpenguins { themes = []; };
+    xpenguins-ratrabbit = callPackage ./pkgs/xpenguins/ratrabbit { themes = []; };
+    xpenguins-themes-unfree = callPackage ./pkgs/xpenguins/themes-unfree.nix {};
+    
     fetchurlRhys-T = pkgs.lib.mirrorFunctionArgs pkgs.fetchurl (args: (pkgs.fetchurl args).overrideAttrs (old: {
         mirrorsFile = old.mirrorsFile.overrideAttrs (old: self.myLib.mirrors);
     }));
