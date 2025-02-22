@@ -103,6 +103,7 @@ jobs:
           experimental-features = nix-command flakes
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem)}}
+    - uses: DeterminateSystems/magic-nix-cache-action@main
     - name: Show nixpkgs version
       run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
     # - name: Setup cachix
