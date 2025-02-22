@@ -21,6 +21,8 @@
   } else {})
 }:
 
+if subsetName == "test-380683" then pkgs.tests.stdenv.hooks.no-broken-symlinks else
+
 with builtins;
 let
   inherit (pkgs) lib;

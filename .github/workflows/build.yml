@@ -29,23 +29,25 @@ jobs:
             [
               "Lnx x64/ubuntu-latest",
               # "Lnx A64/ubuntu-latest+qemu-aarch64-linux",
-              "Lnx A64/ubuntu-24.04-arm",
+              # "Lnx A64/ubuntu-24.04-arm",
               "Mac x64/macos-13",
-              "Mac A64/macos-latest",
+              # "Mac A64/macos-latest",
             empty] as $runners |
             
             [
-              "nixpkgs-unstable",
-              "nixos-unstable",
-              "nixos-24.11",
-              "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc",
+              # "nixpkgs-unstable",
+              # "nixos-unstable",
+              # "nixos-24.11",
+              # "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc",
+              "fix-no-broken-symlinks-hook",
             empty] as $nixpkgss |
             
             [
-              "base",
-              "mame",
-              "hbmame",
-              "qemu-screamer",
+              # "base",
+              # "mame",
+              # "hbmame",
+              # "qemu-screamer",
+              "test-380683",
             empty] as $subsets |
             
             {include: [
@@ -53,8 +55,8 @@ jobs:
               $nixpkgss[] as $nixpkgs |
               (if $nixpkgs | test("^[0-9a-f]{40}$") then $nixpkgs else "refs/heads/\($nixpkgs)" end) as $nixpkgsPath |
               ($runner | split("/")) as [$displayRunner, $runner] |
-              select(($runner | startswith("ubuntu")) or ($nixpkgs | startswith("nixos") | not)) |
-              select(($runner == "macos-13") or ($nixpkgs != "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc")) |
+              # select(($runner | startswith("ubuntu")) or ($nixpkgs | startswith("nixos") | not)) |
+              # select(($runner == "macos-13") or ($nixpkgs != "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc")) |
               ($runner | split("+qemu-")) as [$runner, $qemuSystem] |
               (if $qemuSystem then {
                 "aarch64-linux": "arm64",
@@ -97,21 +99,21 @@ jobs:
     - name: Install nix
       uses: cachix/install-nix-action@v30
       with:
-        nix_path: "nixpkgs=https://github.com/NixOS/nixpkgs/archive/${{ matrix.nixpkgsPath }}.tar.gz"
+        nix_path: "nixpkgs=https://github.com/Rhys-T/nixpkgs/archive/${{ matrix.nixpkgsPath }}.tar.gz"
         extra_nix_config: |
           experimental-features = nix-command flakes
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
           ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem)}}
     - name: Show nixpkgs version
       run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
-    - name: Setup cachix
-      uses: cachix/cachix-action@v15
-      # Don't replace <YOUR_CACHIX_NAME> here!
-      if: ${{ matrix.cachixName != '<YOUR_CACHIX_NAME>' }}
-      with:
-        name: ${{ matrix.cachixName }}
-        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    # - name: Setup cachix
+    #   uses: cachix/cachix-action@v15
+    #   # Don't replace <YOUR_CACHIX_NAME> here!
+    #   if: ${{ matrix.cachixName != '<YOUR_CACHIX_NAME>' }}
+    #   with:
+    #     name: ${{ matrix.cachixName }}
+    #     signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+    #     authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: Check evaluation
       run: |
         nix-env -f . -qa \* --meta --xml \
@@ -133,12 +135,12 @@ jobs:
           /nix/var/log
           !/nix/var/log/nix/drvs/*/*user-environment*
         if-no-files-found: ignore
-  trigger-update:
-    name: Trigger NUR update
-    runs-on: ubuntu-latest
-    needs: tests
-    steps:
-    - name: Trigger NUR update
-      # Don't replace <YOUR_REPO_NAME> here!
-      if: ${{ needs.tests.outputs.nurRepo != '<YOUR_REPO_NAME>' }}
-      run: curl -XPOST "https://nur-update.nix-community.org/update?repo=${{ needs.tests.outputs.nurRepo }}"
+  # trigger-update:
+  #   name: Trigger NUR update
+  #   runs-on: ubuntu-latest
+  #   needs: tests
+  #   steps:
+  #   - name: Trigger NUR update
+  #     # Don't replace <YOUR_REPO_NAME> here!
+  #     if: ${{ needs.tests.outputs.nurRepo != '<YOUR_REPO_NAME>' }}
+  #     run: curl -XPOST "https://nur-update.nix-community.org/update?repo=${{ needs.tests.outputs.nurRepo }}"
