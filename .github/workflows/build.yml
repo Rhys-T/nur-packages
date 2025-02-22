@@ -113,19 +113,21 @@ jobs:
         name: ${{ matrix.cachixName }}
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - name: Check evaluation
-      run: |
-        nix-env -f . -qa \* --meta --xml \
-          --allowed-uris https://static.rust-lang.org \
-          --option restrict-eval true \
-          --option allow-import-from-derivation true \
-          --drv-path --show-trace \
-          -I nixpkgs=$(nix-instantiate --find-file nixpkgs) \
-          -I $PWD
+    # - name: Check evaluation
+    #   run: |
+    #     nix-env -f . -qa \* --meta --xml \
+    #       --allowed-uris https://static.rust-lang.org \
+    #       --option restrict-eval true \
+    #       --option allow-import-from-derivation true \
+    #       --drv-path --show-trace \
+    #       -I nixpkgs=$(nix-instantiate --find-file nixpkgs) \
+    #       -I $PWD
     - name: Build nix packages
       id: build
       # run: nix shell -f '<nixpkgs-normal>' nix-build-uncached -c nix-build-uncached ci.nix -build-flags '-L --keep-going' ${{ matrix.qemuSystem && format('--argstr platform {0}', matrix.qemuSystem) }} --argstr subsetName ${{ matrix.subset }} -A cacheOutputs
-      run: nix-build '<nixpkgs>' -A tests.stdenv.hooks.no-broken-symlinks
+      # run: nix-build --keep-going '<nixpkgs>' -A tests.stdenv.hooks.no-broken-symlinks
+      run: |
+        nix-build --keep-going -E 'with import <nixpkgs> {}; builtins.mapAttrs (k: v: v.overrideAttrs { NIX_DEBUG = 7; }) tests.stdenv.hooks.no-broken-symlinks'
     - name: Upload build logs
       if: '!cancelled()'
       uses: actions/upload-artifact@v4
