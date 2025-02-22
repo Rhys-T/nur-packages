@@ -4,8 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
-      - master
+      - test-NixOS-nixpkgs-380683
   schedule:
     # rebuild everyday at 3:30
     # TIP: Choose a random time here so not all repositories are build at once:
