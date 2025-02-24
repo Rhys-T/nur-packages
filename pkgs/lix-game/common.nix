@@ -4,7 +4,7 @@
     src = fetchFromGitHub {
         owner = "SimonN";
         repo = "LixD";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-R6iRjov21GmzvwX5/a9C7GPu1VE8g/JnGP9z/q4k6ew=";
     };
     assetsHash = "sha256-wyqIBsWuo8xc9tgvE4VKQhnOg7YAhF6+U04tXLt7e6g=";

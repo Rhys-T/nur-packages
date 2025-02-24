@@ -236,6 +236,11 @@ in {
     xpenguins-ratrabbit = callPackage ./pkgs/xpenguins/ratrabbit { themes = []; };
     xpenguins-themes-unfree = callPackage ./pkgs/xpenguins/themes-unfree.nix {};
     
+    fetchFromGitHub = if (pkgs.lib.functionArgs pkgs.fetchFromGitHub)?tag then pkgs.fetchFromGitHub else let
+        fetchFunc = {tag?null, ...}@args: pkgs.fetchFromGitHub (removeAttrs args ["tag"] // pkgs.lib.optionalAttrs (tag != null) {rev = "refs/tags/${tag}";});
+        fetchArgs = pkgs.lib.functionArgs pkgs.fetchFromGitHub // pkgs.functionArgs fetchFunc;
+        final = pkgs.lib.setFunctionArgs fetchFunc fetchArgs;
+    in final;
     fetchurlRhys-T = pkgs.lib.mirrorFunctionArgs pkgs.fetchurl (args: (pkgs.fetchurl args).overrideAttrs (old: {
         mirrorsFile = old.mirrorsFile.overrideAttrs (old: self.myLib.mirrors);
     }));

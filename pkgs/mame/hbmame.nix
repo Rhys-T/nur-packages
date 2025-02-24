@@ -7,7 +7,7 @@
         src = fetchFromGitHub {
             owner = "Robbbert";
             repo = "hbmame";
-            rev = "tag${builtins.replaceStrings [ "." ] [ "" ] (lib.removePrefix "0." version)}";
+            tag = "tag${builtins.replaceStrings [ "." ] [ "" ] (lib.removePrefix "0." version)}";
             sha256 = "sha256-NPdOJ/o5bUlVDYECvpg/8uSwDw+0sHBE5ixYYYhnehc=";
         };
         nativeBuildInputs = (old.nativeBuildInputs or []) ++ [icoutils];

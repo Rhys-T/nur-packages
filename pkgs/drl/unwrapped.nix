@@ -2,18 +2,18 @@
     libExt = stdenv.hostPlatform.extensions.sharedLibrary;
     version = "0.9.9.8a";
     gitShortRev = "97f1c51";
-    rev = builtins.replaceStrings ["."] ["_"] version;
+    tag = builtins.replaceStrings ["."] ["_"] version;
     shortVersion = lib.concatStrings (builtins.filter (x: builtins.match "[0-9]+" x != null) (builtins.splitVersion version));
     src = fetchFromGitHub {
         owner = "chaosforgeorg";
         repo = "doomrl";
-        inherit rev;
+        inherit tag;
         hash = "sha256-5FwaBuMFrz5dOxhHsJZLmL/PkwhXgW5XpVKDWoiVuWk=";
     };
     fpcvalkyrie = fetchFromGitHub {
         owner = "chaosforgeorg";
         repo = "fpcvalkyrie";
-        rev = "0_9_0a";
+        tag = "0_9_0a";
         hash = "sha256-R/FgbmT7pvw9Qn0a7uR/Hw4pEQ2mArZY6sqXShQWU1Q=";
     };
     fpc-wrapper = symlinkJoin {
