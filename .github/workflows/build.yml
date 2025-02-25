@@ -127,7 +127,8 @@ jobs:
       # run: nix shell -f '<nixpkgs-normal>' nix-build-uncached -c nix-build-uncached ci.nix -build-flags '-L --keep-going' ${{ matrix.qemuSystem && format('--argstr platform {0}', matrix.qemuSystem) }} --argstr subsetName ${{ matrix.subset }} -A cacheOutputs
       # run: nix-build --keep-going '<nixpkgs>' -A tests.stdenv.hooks.no-broken-symlinks
       run: |
-        nix-build --keep-going -E 'with import <nixpkgs> {}; builtins.mapAttrs (k: v: v.overrideAttrs { NIX_DEBUG = 7; }) tests.stdenv.hooks.no-broken-symlinks'
+        nix build --keep-going -L --impure --expr 'with import <nixpkgs> {}; builtins.mapAttrs (k: v: v.overrideAttrs { NIX_DEBUG = 7; }) tests.stdenv.hooks.no-broken-symlinks'
+      # nix-build --keep-going -E 'with import <nixpkgs> {}; builtins.mapAttrs (k: v: v.overrideAttrs { NIX_DEBUG = 7; }) tests.stdenv.hooks.no-broken-symlinks'
     - name: Upload build logs
       if: '!cancelled()'
       uses: actions/upload-artifact@v4
