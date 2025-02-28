@@ -134,7 +134,8 @@ in {
     
     # Backported fixes from https://github.com/NixOS/nixpkgs/pull/385459
     picolisp = let
-        inherit (pkgs) lib picolisp hostPlatform;
+        inherit (pkgs) lib picolisp hostPlatform darwin;
+        needsLibutil = hostPlatform.isDarwin && !(lib.lists.any (p: (p.pname or null) == "libutil") (pkgs.apple-sdk.propagatedBuildInputs or []));
         picolisp' = if lib.hasInfix "cd src" (picolisp.preBuild or "") then picolisp else picolisp.overrideAttrs (old: {
             preBuild = (old.preBuild or "") + ''
                 cd src
@@ -146,6 +147,8 @@ in {
             '';
             buildPhase = null;
             installPhase = builtins.replaceStrings ["--replace "] ["--replace-fail "] old.installPhase;
+        } // lib.optionalAttrs needsLibutil {
+            buildInputs = (old.buildInputs or []) ++ [darwin.libutil];
         });
     in lib.addMetaAttrs ({
         description = (picolisp.meta.description or "PicoLisp") + " (fixed for macOS/Darwin)";
