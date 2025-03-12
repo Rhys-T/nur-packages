@@ -1,4 +1,4 @@
-{stdenv, lib, zlib, cmake, memorymappingHook ? {}.memorymappingHook, fetchFromGitHub, maintainers}: let
+{stdenv, lib, zlib, cmake, memorymappingHook ? {}.memorymappingHook, fetchFromGitHub, unstableGitUpdater, maintainers}: let
     needsMemorymapping = stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
 in stdenv.mkDerivation rec {
     pname = "phosg";
@@ -42,4 +42,5 @@ in stdenv.mkDerivation rec {
         in needsMemorymapping && memorymapping.meta.broken;
         maintainers = [maintainers.Rhys-T];
     };
+    passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 }
