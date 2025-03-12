@@ -2,7 +2,7 @@
     needsMemorymapping = stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
 in stdenv.mkDerivation rec {
     pname = "resource_dasm";
-    version = "0-unstable-2025-03-10";
+    version = "0-unstable-2025-03-09";
     src = fetchFromGitHub {
         owner = "fuzziqersoftware";
         repo = pname;
