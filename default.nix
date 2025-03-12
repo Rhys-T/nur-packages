@@ -333,4 +333,6 @@ in {
     lib = result.myLib;
     modules = result.myModules;
     overlays = result.myOverlays;
+    # HACK to make <nixpkgs/maintainers/scripts/update.nix> work:
+    ZZZZZZ___update-Rhys-T = result;
 }
