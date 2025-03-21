@@ -1,5 +1,11 @@
 name: "Auto-update packages"
 on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - .github/workflows/update.yml
   workflow_dispatch:
   schedule:
     # update everyday at 6:25
