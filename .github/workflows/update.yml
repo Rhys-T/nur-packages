@@ -7,10 +7,6 @@ on:
     # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
     - cron:  '25 6 * * *'
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   update:
     runs-on: ubuntu-latest
