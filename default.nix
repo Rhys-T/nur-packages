@@ -358,7 +358,7 @@ in {
         inherit (pkgs) lib;
         wine64Full = pkgs.wine64Packages.full;
     in
-    lib.warnOnInstantiate "Rhys-T.wine64Full is no longer needed - use wine64Packages.full from Nixpkgs directly" (
+    myLib.warnOnInstantiate "Rhys-T.wine64Full is no longer needed - use wine64Packages.full from Nixpkgs directly" (
         dontUpdate (wine64Full.overrideAttrs (old: {
             meta = (old.meta or {}) // {
                 position = myPos "wine64Full";
