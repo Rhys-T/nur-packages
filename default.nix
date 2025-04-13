@@ -361,6 +361,7 @@ in {
     myLib.warnOnInstantiate "Rhys-T.wine64Full is no longer needed - use wine64Packages.full from Nixpkgs directly" (
         dontUpdate (wine64Full.overrideAttrs (old: {
             meta = (old.meta or {}) // {
+                description = (old.meta.description or "wine64Full") + " [DEPRECATED - use wine64Packages.full from Nixpkgs directly]";
                 position = myPos "wine64Full";
             };
             passthru = (old.passthru or {}) // {
