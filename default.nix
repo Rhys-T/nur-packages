@@ -126,6 +126,7 @@ in {
             pos = myPos "ldc";
         };
     }));
+    buildDubPackage = pkgs.buildDubPackage.override { inherit (self) ldc; };
     
     xscorch = callPackage ./pkgs/xscorch {};
     
