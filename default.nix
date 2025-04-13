@@ -369,6 +369,10 @@ in {
         }))
     );
     
+    _ciOnly.mac = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin (pkgs.lib.recurseIntoAttrs {
+        wine64Full = pkgs.wine64Packages.full;
+    });
+    
     tuxemon = callPackage ./pkgs/tuxemon {};
     tuxemon-git = callPackage ./pkgs/tuxemon/git.nix {};
     libShake = callPackage ./pkgs/libShake {};
