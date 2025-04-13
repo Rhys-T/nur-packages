@@ -110,7 +110,7 @@ in {
     };
     
     # Temporarily work around ldc-developers/ldc#4899 by backporting ldc-developers/ldc#4877.
-    # Note that this still won't build on 15.4 itself, because the bootstrap compiler still
+    # Note that this still won't run on 15.4 itself, because the bootstrap compiler still
     # has the bug. But if you pull it from the cache, this version should run and produce
     # working executables. Hopefully.
     ldc = let
