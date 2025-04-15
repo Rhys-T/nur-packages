@@ -27,13 +27,16 @@ let pkgs = if with pkgs'; stdenv.hostPlatform.isDarwin && (tests.stdenv.hooks or
     })
 else pkgs'; in
 
-let result = pkgs.lib.makeScope pkgs.newScope (self: let
+let
+
+dontUpdate = p: let
+    p' = if p?overrideAttrs then p.overrideAttrs (old: pkgs.lib.optionalAttrs (old?passthru) {
+        passthru = removeAttrs old.passthru ["updateScript"];
+    }) else p;
+in removeAttrs p' ["updateScript"];
+
+result = pkgs.lib.makeScope pkgs.newScope (self: let
     inherit (self) callPackage myLib;
-    dontUpdate = p: let
-        p' = if p?overrideAttrs then p.overrideAttrs (old: pkgs.lib.optionalAttrs (old?passthru) {
-            passthru = removeAttrs old.passthru ["updateScript"];
-        }) else p;
-    in removeAttrs p' ["updateScript"];
     myPos = name: with builtins.unsafeGetAttrPos "description" self.${name}.meta; "${file}:${toString line}";
 in {
     # The `lib`, `modules`, and `overlays` names are special
@@ -321,13 +324,6 @@ in {
         };
     }));
     
-    fpc = myLib.warnOnInstantiate "Rhys-T.wine64Full is no longer needed - use fpc from Nixpkgs directly" (
-        dontUpdate (myLib.addMetaAttrsDeep ({
-            description = "${pkgs.fpc.meta.description or "fpc"} [DEPRECATED - use fpc from Nixpkgs directly]";
-            position = myPos "fpc";
-        }) pkgs.fpc)
-    );
-    
     drl-packages = callPackage ./pkgs/drl/packages.nix {};
     inherit (self.drl-packages) drl drl-hq drl-lq;
     
@@ -398,8 +394,27 @@ in {
     #         ;
     #     });
     # });
-}); in result // {
+});
+
+deprecatedStub' = myName: npName: let
+    inherit (pkgs) lib;
+    inherit (result) myLib;
+    realPkg = lib.attrByPath (lib.splitString "." npName) null pkgs;
+in myLib.warnOnInstantiate "Rhys-T.${myName} is no longer needed - use ${npName} from Nixpkgs directly" (
+    dontUpdate (
+        myLib.addMetaAttrsDeep ({
+            description = "${realPkg.meta.description or npName} [DEPRECATED - use ${npName} from Nixpkgs directly]";
+            position = __curPos;
+        }) realPkg
+    )
+);
+deprecatedStub = name: deprecatedStub' name name;
+
+in result // {
     lib = result.myLib;
     modules = result.myModules;
     overlays = result.myOverlays;
+    
+    fpc = deprecatedStub "fpc";
+    wine64Full = deprecatedStub' "wine64Full" "wine64Packages.full";
 }
