@@ -321,25 +321,12 @@ in {
         };
     }));
     
-    fpc = let
-        inherit (pkgs) lib;
-        fpcOrig = pkgs.fpc;
-        needsOldClang = fpcOrig.stdenv.cc.isClang && lib.versionAtLeast fpcOrig.stdenv.cc.version "18";
-        fpc = if needsOldClang then fpcOrig.override {
-            inherit (pkgs.llvmPackages_17) stdenv;
-        } else fpcOrig;
-        needsFix =
-            pkgs.stdenv.hostPlatform.isDarwin && 
-            !(lib.hasInfix "-syslibroot $SDKROOT" (fpc.preConfigure or ""))
-        ;
-    in dontUpdate (myLib.addMetaAttrsDeep ({
-        description = "${fpc.meta.description or "fpc"} (fixed for macOS/Darwin, with Clang version capped at 17 to fix build)";
-        position = myPos "fpc";
-    }) (if needsFix then fpc.overrideAttrs (old: {
-        preConfigure = ''
-            NIX_LDFLAGS="-syslibroot $SDKROOT -L${lib.getLib pkgs.libiconv}/lib"
-        '' + (old.preConfigure or "");
-    }) else fpc));
+    fpc = myLib.warnOnInstantiate "Rhys-T.wine64Full is no longer needed - use fpc from Nixpkgs directly" (
+        dontUpdate (myLib.addMetaAttrsDeep ({
+            description = "${pkgs.fpc.meta.description or "fpc"} [DEPRECATED - use fpc from Nixpkgs directly]";
+            position = myPos "fpc";
+        }) pkgs.fpc)
+    );
     
     drl-packages = callPackage ./pkgs/drl/packages.nix {};
     inherit (self.drl-packages) drl drl-hq drl-lq;
