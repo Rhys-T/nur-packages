@@ -14,6 +14,7 @@ on:
     branches:
       - main
       - master
+      - test/*
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
@@ -22,11 +23,11 @@ on:
       - 'flake.nix'
       - 'flake.lock'
       - 'update.nix'
-  schedule:
-    # rebuild everyday at 3:30
-    # TIP: Choose a random time here so not all repositories are build at once:
-    # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
-    - cron:  '30 3 * * *'
+  # schedule:
+  #   # rebuild everyday at 3:30
+  #   # TIP: Choose a random time here so not all repositories are build at once:
+  #   # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
+  #   - cron:  '30 3 * * *'
 jobs:
   define-matrix:
     name: Define job matrix
@@ -43,24 +44,25 @@ jobs:
             "rhys-t" as $cachixName |
             
             [
-              "Lnx x64/ubuntu-latest",
-              "Lnx A64/ubuntu-24.04-arm",
+              # "Lnx x64/ubuntu-latest",
+              # "Lnx A64/ubuntu-24.04-arm",
               "Mac x64/macos-13",
               "Mac A64/macos-latest",
             empty] as $runners |
             
             [
-              "nixpkgs-unstable",
-              "nixos-unstable",
-              "nixos-24.11",
+              # "nixpkgs-unstable",
+              # "nixos-unstable",
+              # "nixos-24.11",
               "nixpkgs-24.11-darwin",
             empty] as $nixpkgss |
             
             [
-              "base",
-              "mame",
-              "hbmame",
-              "qemu-screamer",
+              "test",
+              # "base",
+              # "mame",
+              # "hbmame",
+              # "qemu-screamer",
             empty] as $subsets |
             
             {include: [
@@ -68,8 +70,8 @@ jobs:
               $nixpkgss[] as $nixpkgs |
               (if $nixpkgs | test("^[0-9a-f]{40}$") then $nixpkgs else "refs/heads/\($nixpkgs)" end) as $nixpkgsPath |
               ($runner | split("/")) as [$displayRunner, $runner] |
-              select(($runner | startswith("ubuntu")) or ($nixpkgs | startswith("nixos") | not)) |
-              select(($runner == "macos-13") or ($nixpkgs != "nixpkgs-24.11-darwin")) |
+              # select(($runner | startswith("ubuntu")) or ($nixpkgs | startswith("nixos") | not)) |
+              # select(($runner == "macos-13") or ($nixpkgs != "nixpkgs-24.11-darwin")) |
               ($runner | split("+qemu-")) as [$runner, $qemuSystem] |
               (if $qemuSystem then {
                 "aarch64-linux": "arm64",

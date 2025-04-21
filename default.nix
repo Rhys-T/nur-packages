@@ -118,11 +118,11 @@ in {
         OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
         ARCH = if hostPlatform.isDarwin && hostPlatform.isAarch64 then "arm64" else hostPlatform.parsed.cpu.name;
         oldBootstrapHashes = {
-            osx-x86_64 = "sha256-mqQ+hNlDePOGX2mwgEEzHGiOAx3SxfNA6x8+ML3qYmw=";
-            osx-arm64 = "sha256-m93rGywncBnPEWslcrXuGBnZ+Z/mNgLIaevkL/uBOu0=";
+            osx-x86_64 = "sha256-Mbik36r8pZnPBtkIrwHRfmaenJdBDkQoyLdfo1OfzZk=";
+            osx-arm64 = "sha256-EWgGIUUZJn621uYmWBlT9e6+zW4nyBlWvlfH8oi3NfA=";
         };
         oldBootstrap = ldcBootstrap.overrideAttrs (old: rec {
-            version = "1.28.1";
+            version = "1.41.0-beta1";
             src = pkgs.fetchurl rec {
                 name = "ldc2-${version}-${OS}-${ARCH}.tar.xz";
                 url = "https://github.com/ldc-developers/ldc/releases/download/v${version}/${name}";
