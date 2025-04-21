@@ -51,10 +51,10 @@ jobs:
             empty] as $runners |
             
             [
-              # "nixpkgs-unstable",
+              "nixpkgs-unstable",
               # "nixos-unstable",
               # "nixos-24.11",
-              "nixpkgs-24.11-darwin",
+              # "nixpkgs-24.11-darwin",
             empty] as $nixpkgss |
             
             [
