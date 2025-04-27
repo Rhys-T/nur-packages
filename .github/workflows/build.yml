@@ -205,7 +205,7 @@ jobs:
           pattern: buildFailures-*
           merge-multiple: true
       - name: Save merged build failure cache
-        uses: actions/cache/save
+        uses: actions/cache/save@v4
         with:
           path: /tmp/buildFailures
           key: buildFailures-${{ hashFiles('**.nix,pkgs/**') }}
