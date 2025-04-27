@@ -79,7 +79,7 @@ in
 rec {
   buildPkgs = filter isBuildable nurPkgs;
   cachePkgs' = filter isCacheable buildPkgs;
-  cachePkgs = filter subset buildPkgs;
+  cachePkgs = filter subset cachePkgs';
 
   buildOutputs = concatMap outputsOf buildPkgs;
   cacheOutputs = concatMap outputsOf cachePkgs;
