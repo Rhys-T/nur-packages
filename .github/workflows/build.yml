@@ -121,7 +121,7 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-          ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem)}}
+          ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem) || '' }}
     - name: Show nixpkgs version
       run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
     - name: Setup cachix
@@ -155,15 +155,15 @@ jobs:
         nix shell -f '<nixpkgs>' nix-build-uncached -c \
           nix-build-uncached ci.nix \
             -build-flags '-L --keep-going' \
-            ${{ matrix.qemuSystem && format('--argstr platform {0}', matrix.qemuSystem) }} \
-            ${{ steps.restoreFailCache.outputs.cache-hit == 'true' && '--arg cachedBuildFailures /tmp/buildFailures' }} \
+            ${{ matrix.qemuSystem && format('--argstr platform {0}', matrix.qemuSystem) || '' }} \
+            ${{ steps.restoreFailCache.outputs.cache-hit == 'true' && '--arg cachedBuildFailures /tmp/buildFailures' || '' }} \
             --argstr subsetName ${{ matrix.subset }} -A cacheOutputs \
           2>&1 | tee /tmp/build-uncached.log
     - name: Upload build logs
       if: '!cancelled()'
       uses: actions/upload-artifact@v4
       with:
-        name: Rhys-T-nur-packages-build-logs-${{ matrix.runner }}${{ matrix.qemuSystem && format('+qemu-{0}', matrix.qemuSystem) }}-${{ matrix.nixpkgs }}-${{ matrix.subset }}
+        name: Rhys-T-nur-packages-build-logs-${{ matrix.runner }}${{ matrix.qemuSystem && format('+qemu-{0}', matrix.qemuSystem) || '' }}-${{ matrix.nixpkgs }}-${{ matrix.subset }}
         path: |
           /nix/var/log
           !/nix/var/log/nix/drvs/*/*user-environment*
