@@ -70,7 +70,6 @@ jobs:
             {include: [
               $runners[] as $runner |
               $nixpkgss[] as $nixpkgs |
-              (if $nixpkgs | test("^[0-9a-f]{40}$") then $nixpkgs else "refs/heads/\($nixpkgs)" end) as $nixpkgsPath |
               ($runner | split("/")) as [$displayRunner, $runner] |
               (if ($runner | startswith("macos")) then
                 $nixpkgs | gsub("^nixos-(?<version>[0-9]+\\.[0-9]+)$"; "nixpkgs-\(.version)-darwin")
@@ -83,6 +82,7 @@ jobs:
               # (if $qemuSystem then $subsets[] else "all" end) as $subset |
               $subsets[] as $subset |
               select(($runner | startswith("macos")) or ($subset != "mame")) |
+              (if $nixpkgs | test("^[0-9a-f]{40}$") then $nixpkgs else "refs/heads/\($nixpkgs)" end) as $nixpkgsPath |
               ($nixpkgs |
                 gsub("^nixpkgs-"; "NP-") |
                 gsub("^nixos-"; "NO-") |
