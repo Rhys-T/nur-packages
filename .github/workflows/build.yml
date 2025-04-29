@@ -105,8 +105,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.cache/nix/tarball-cache
-            ~/.cache/nix/gitv3
+            ~/.cache/nix/*
+            !~/.cache/nix/binary-cache-*
           key: nixCache-${{ steps.matrix.outputs.cacheKey }}
           restore-keys: nixCache-${{ steps.matrix.outputs.cachePrefix }}
       - name: Install nix
@@ -161,8 +161,8 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: |
-          ~/.cache/nix/tarball-cache
-          ~/.cache/nix/gitv3
+            ~/.cache/nix/*
+            !~/.cache/nix/binary-cache-*
         key: nixCache-${{ needs.define-matrix.outputs.cacheKey }}
         restore-keys: nixCache-${{ needs.define-matrix.outputs.cachePrefix }}
     - name: Show nixpkgs version
