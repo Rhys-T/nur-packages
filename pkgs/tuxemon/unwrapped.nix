@@ -92,6 +92,11 @@ in let
         postPatch = ''
             substituteInPlace tuxemon/platform/__init__.py \
                 --replace-fail '"/usr/share/tuxemon/"' 'os.path.join(os.getenv("NIX_TUXEMON_DIR"), "")'
+            substituteInPlace tuxemon/db.py --replace-fail \
+            '        return DatabaseConfig(**data)' \
+            '        config = DatabaseConfig(**data);
+                    config.mod_base_path = os.path.join(os.path.dirname(os.path.dirname(config_path)), config.mod_base_path)
+                    return config'
             sed -Ei '
                 s@import logging@&, sys@
                 /mods_folder =/ {
