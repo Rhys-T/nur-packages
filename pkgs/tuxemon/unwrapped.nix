@@ -92,11 +92,6 @@ in let
         postPatch = ''
             substituteInPlace tuxemon/platform/__init__.py \
                 --replace-fail '"/usr/share/tuxemon/"' 'os.path.join(os.getenv("NIX_TUXEMON_DIR"), "")'
-            substituteInPlace tuxemon/db.py --replace-fail \
-            '        return DatabaseConfig(**data)' \
-            '        config = DatabaseConfig(**data);
-                    config.mod_base_path = os.path.join(os.path.dirname(os.path.dirname(config_path)), config.mod_base_path)
-                    return config'
             sed -Ei '
                 s@import logging@&, sys@
                 /mods_folder =/ {
@@ -105,6 +100,12 @@ in let
             ' tuxemon/constants/paths.py
         '' + lib.optionalString withLibShake ''
             sed -Ei 's@locations = \[.*\]@locations = ["${lib.getLib libShake}/lib/libShake${hostPlatform.extensions.sharedLibrary}"]@' tuxemon/rumble/__init__.py
+        '' + lib.optionalString (lib.versionAtLeast version "0.4.34-unstable-2025-03-14") ''
+                    substituteInPlace tuxemon/db.py --replace-fail \
+            '        return DatabaseConfig(**data)' \
+            '        config = DatabaseConfig(**data);
+                    config.mod_base_path = os.path.join(os.path.dirname(os.path.dirname(config_path)), config.mod_base_path)
+                    return config'
         '';
         makeWrapperArgs = ["--set-default NIX_TUXEMON_DIR $out/share/tuxemon"];
         postInstall = ''
