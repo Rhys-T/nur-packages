@@ -253,7 +253,7 @@ jobs:
         with:
           jobs: ${{ toJSON(needs) }}
   merge-fail-cache:
-    if: always()
+    if: '!cancelled()'
     runs-on: ubuntu-latest
     needs: tests
     steps:
