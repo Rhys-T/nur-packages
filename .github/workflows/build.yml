@@ -104,7 +104,9 @@ jobs:
         id: cache
         uses: actions/cache@v4
         with:
-          path: ~/.cache/nix
+          path: |
+            ~/.cache/nix/tarball-cache
+            ~/.cache/nix/gitv3
           key: nixCache-${{ steps.matrix.outputs.cacheKey }}
           restore-keys: nixCache-${{ steps.matrix.outputs.cachePrefix }}
       - name: Install nix
