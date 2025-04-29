@@ -160,7 +160,9 @@ jobs:
     - name: Restore Nixpkgs cache
       uses: actions/cache/restore@v4
       with:
-        path: '~/.cache/nix'
+        path: |
+          ~/.cache/nix/tarball-cache
+          ~/.cache/nix/gitv3
         key: nixCache-${{ needs.define-matrix.outputs.cacheKey }}
         restore-keys: nixCache-${{ needs.define-matrix.outputs.cachePrefix }}
     - name: Show nixpkgs version
