@@ -114,6 +114,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   # SCREAMER: load patches from GitHub
   patches = [
+    # On macOS, QEMU uses `Rez(1)` and `SetFile(1)` to attach its icon
+    # to the binary. Unfortunately, those commands are proprietary,
+    # deprecated since Xcode 6, and operate on resource forks, which
+    # these days are stored in extended attributes, which aren’t
+    # supported in the Nix store. So we patch out the calls.
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/NixOS/nixpkgs/ed8925fc509a703a5799c97dbdd89ce0c8ac86b8/pkgs/applications/virtualization/qemu/skip-macos-icon.patch";
+      hash = "sha256-MMyv5cRstt+aYvDb7T65tnx9iux4Uvoy/hthz02VqjY=";
+    })
+
     (nixpkgsPatch "fix-qemu-ga.patch")
 
     # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
