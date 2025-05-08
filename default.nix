@@ -116,7 +116,11 @@ in {
     # and downgrading the bootstrap compiler.
     ldc = let
         inherit (pkgs.stdenv) hostPlatform;
-        needsMacPatch = hostPlatform.isDarwin && pkgs.lib.versionOlder pkgs.ldc.version "1.40.2";
+        needsMacPatch =
+            hostPlatform.isDarwin &&
+            pkgs.lib.versionOlder pkgs.ldc.version "1.40.2" &&
+            !(pkgs.lib.any (p: (p.outputHash or null) == "sha256-Y/5+zt5ou9rzU7rLJq2OqUxMDvC7aSFS6AsPeDxNATQ=") pkgs.ldc.patches)
+        ;
         ldcBootstrap = pkgs.callPackage (pkgs.path + "/pkgs/by-name/ld/ldc/bootstrap.nix") {};
         OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
         ARCH = if hostPlatform.isDarwin && hostPlatform.isAarch64 then "arm64" else hostPlatform.parsed.cpu.name;
