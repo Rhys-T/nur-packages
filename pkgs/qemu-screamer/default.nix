@@ -38,7 +38,7 @@
 , nixosTestRunner ? false
 # SCREAMER: backported https://github.com/NixOS/nixpkgs/commit/6e980e645823095c83c12eea43691e7a407bd6b4
 # SCREAMER:
-, fetchFromGitHub, callPackage, maintainers
+, apple-sdk_11, fetchFromGitHub, callPackage, maintainers
 }:
 # SCREAMER: load patches from GitHub
 let
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.looseversion
   ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+    # SCREAMER: Remove old frameworks and stubs
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
   buildInputs = [ zlib glib perl pixman
@@ -104,7 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
     ++ lib.optionals uringSupport [ liburing ]
-    ++ lib.optionals canokeySupport [ canokey-qemu ];
+    ++ lib.optionals canokeySupport [ canokey-qemu ]
+    # SCREAMER:
+    ++ lib.optionals stdenv.isDarwin [ apple-sdk_11 ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -114,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # SCREAMER: load patches from GitHub
   patches = [
+    # SCREAMER:
     # On macOS, QEMU uses `Rez(1)` and `SetFile(1)` to attach its icon
     # to the binary. Unfortunately, those commands are proprietary,
     # deprecated since Xcode 6, and operate on resource forks, which
