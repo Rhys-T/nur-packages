@@ -16,17 +16,17 @@ in let
     python3Packages = (python3PackagesOrig.python.override {
         packageOverrides = pself: psuper: {
             pyglet = pself.callPackage ./fix-pyglet.nix { pyglet' = psuper.pyglet; };
+            # Backport fix from <https://github.com/NixOS/nixpkgs/pull/405640>
+            pygame-ce = let
+                inherit (psuper) pygame-ce;
+                pygame-ce-args = lib.functionArgs pygame-ce.override;
+            in if pygame-ce-args?SDL2_classic && pygame-ce-args?SDL2_image then pygame-ce.override {
+                SDL2_image = SDL2_classic_image;
+                SDL2_mixer = SDL2_classic_mixer_2_0;
+                SDL2_ttf = SDL2_classic_ttf;
+            } else pygame-ce;
         };
     }).pkgs;
-    # Backport fix from <https://github.com/NixOS/nixpkgs/pull/405640>
-    pygame-ce' = let
-        inherit (python3Packages) pygame-ce;
-        pygame-ce-args = lib.functionArgs pygame-ce.override;
-    in if pygame-ce-args?SDL2_classic && pygame-ce-args?SDL2_image then pygame-ce.override {
-        SDL2_image = SDL2_classic_image;
-        SDL2_mixer = SDL2_classic_mixer_2_0;
-        SDL2_ttf = SDL2_classic_ttf;
-    } else pygame-ce;
     neteria = python3Packages.buildPythonPackage rec {
         pname = "neteria";
         version = "1.0.2";
@@ -46,7 +46,7 @@ in let
             inherit pname version;
             hash = "sha256-GQIFGyCEN5/I22mfCgDSbV0g5o+Nw8RT316vOSsqbHA=";
         };
-        dependencies = [pygame-ce'];
+        dependencies = with python3Packages; [pygame-ce];
     };
     pygame_menu_ce = python3Packages.buildPythonPackage rec {
         pname = "pygame_menu_ce";
@@ -55,7 +55,7 @@ in let
             inherit pname version;
             hash = "sha256-9Y85GHJjBLoE1mt6k+PbRt2J0jr0aPOfWmjL3QjJPhI=";
         };
-        dependencies = with python3Packages; [pygame-ce' pyperclip typing-extensions];
+        dependencies = with python3Packages; [pygame-ce pyperclip typing-extensions];
     };
     tuxemon = python3Packages.buildPythonApplication {
         pname = "tuxemon";
@@ -79,9 +79,9 @@ in let
             cbor
             neteria
             pillow
-            pygame-ce'
+            pygame-ce
             pyscroll
-            (pytmx.override { pygame = pygame-ce'; })
+            pytmx
             requests
             natsort
             pyyaml
@@ -149,7 +149,7 @@ in let
                 mit # for tuxemon/lib/bresenham.py
             ];
             maintainers = [maintainers.Rhys-T];
-            broken = !(lib.meta.availableOn hostPlatform pygame-ce');
+            broken = !(lib.meta.availableOn hostPlatform python3Packages.pygame-ce);
         };
         pos = _pos;
         passthru.updateScript = let
