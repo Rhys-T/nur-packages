@@ -6,6 +6,7 @@
     libShake ? null, withLibShake ? true,
     desktopToDarwinBundle,
     data, attachPkgs, pkgs,
+    SDL2_classic_image ? null, SDL2_classic_mixer_2_0 ? null, SDL2_classic_ttf ? null,
     _pos, gitUpdater, unstableGitUpdater, symlinkJoin, writeShellApplication,
     maintainers
 }: let
@@ -17,15 +18,15 @@ in let
             pyglet = pself.callPackage ./fix-pyglet.nix { pyglet' = psuper.pyglet; };
         };
     }).pkgs;
-    pygame-ce' = python3Packages.pygame-ce.overridePythonAttrs (old: {
-        postPatch = (old.postPatch or "") + lib.optionalString (
-            (lib.versionAtLeast python3Packages.meson-python.version "0.17") &&
-            !(lib.hasInfix "\"meson-python<=" (old.postPatch or ""))
-        ) ''
-            substituteInPlace pyproject.toml \
-                --replace-fail '"meson-python<=0.16.0",' '"meson-python",'
-        '';
-    });
+    # Backport fix from <https://github.com/NixOS/nixpkgs/pull/405640>
+    pygame-ce' = let
+        inherit (python3Packages) pygame-ce;
+        pygame-ce-args = lib.functionArgs pygame-ce.override;
+    in if pygame-ce-args?SDL2_classic && pygame-ce-args?SDL2_image then pygame-ce.override {
+        SDL2_image = SDL2_classic_image;
+        SDL2_mixer = SDL2_classic_mixer_2_0;
+        SDL2_ttf = SDL2_classic_ttf;
+    } else pygame-ce;
     neteria = python3Packages.buildPythonPackage rec {
         pname = "neteria";
         version = "1.0.2";
