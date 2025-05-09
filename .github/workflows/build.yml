@@ -270,7 +270,7 @@ jobs:
             else
               echo -E '{
                 "drv_path": "'"$drvPath"'",
-                "repository": "${{ github.run_id }}",
+                "repository": "${{ github.repository }}",
                 "run_id": "${{ github.run_id }}",
                 "job_id": "${{ github.job }}",
                 "attempt": "${{ github.run_attempt }}"
