@@ -89,7 +89,7 @@ rec {
       failureInfo = builtins.toJSON (map (p: lib.importJSON (cachedBuildFailures + "/${builtins.unsafeDiscardStringContext (baseNameOf p.drvPath)}")) (filter (p: p?drvPath) results.wrong));
     } ''
       echo "error: derivation(s) matched build failure cache:" >&2
-      jq -r '.[] | "error:     \(.drv_path) - https://github.com/\(.repository)/actions/runs/\(.run_id)/job/\(.job_id)\(if .run_attempt != "1" then "/attempts/"+.run_attempt else "" end)' <<< "$failureInfo" >&2
+      ${with pkgs; lib.getExe jq} -r '.[] | "error:     \(.drv_path) - https://github.com/\(.repository)/actions/runs/\(.run_id)/job/\(.job_id)\(if .run_attempt != "1" then "/attempts/"+.run_attempt else "" end)' <<< "$failureInfo" >&2
       echo "error: end of replayed build failures" >&2
       exit 1
     '')
