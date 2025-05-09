@@ -338,7 +338,7 @@ in {
     fpc = let
         inherit (pkgs) lib;
         fpcOrig = pkgs.fpc;
-        needsOldClang = fpcOrig.stdenv.cc.isClang && lib.versionAtLeast fpcOrig.stdenv.cc.version "18";
+        needsOldClang = fpcOrig.stdenv.hostPlatform.isx86_64 && fpcOrig.stdenv.cc.isClang && lib.versionAtLeast fpcOrig.stdenv.cc.version "18";
         fpc = if needsOldClang then fpcOrig.override {
             inherit (pkgs.llvmPackages_17) stdenv;
         } else fpcOrig;
