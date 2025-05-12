@@ -315,6 +315,7 @@ jobs:
           path: /tmp/buildFailures
           key: buildFailures-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Cleanup partial build failure caches
+        if: ${{ runner.debug != '1' }}
         uses: geekyeggo/delete-artifact@f275313e70c08f6120db482d7a6b98377786765b # v5.1.0
         with:
           name: buildFailures-*
