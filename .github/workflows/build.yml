@@ -228,13 +228,14 @@ jobs:
       id: build
       run: |
         set -x
-        mkdir /tmp/tempFlake
+        mkdir -p /tmp/tempFlake/conf
+        echo -En '${{ matrix.subset }}' > /tmp/tempFlake/conf/ciSubsetName
         cat <<EOF >/tmp/tempFlake/flake.nix
         {
           inputs.Rhys-T.url = $(nix-instantiate --eval -E '"git+file://" + toString ./.');
           inputs.Rhys-T.inputs.nixpkgs.url = "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}";
           inputs.Rhys-T.inputs.ciSubsetName = {
-              url = "path:./.";
+              url = "path:./conf";
               flake = false;
           };
           $(if [[ -d /tmp/buildFailures ]]; then
