@@ -251,7 +251,7 @@ jobs:
         }
         EOF
         cat /tmp/tempFlake/flake.nix
-        nix flake update /tmp/tempFlake
+        nix flake lock /tmp/tempFlake
         set -o pipefail
         nix run github:Mic92/nix-fast-build -- -f '/tmp/tempFlake#cacheOutputs' --skip-cached --no-nom | tee /tmp/build-uncached.log
     - name: Upload build logs
