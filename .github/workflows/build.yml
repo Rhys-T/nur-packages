@@ -187,7 +187,7 @@ jobs:
           ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem) || '' }}
     - name: Set NIX_PATH
       run: |
-        echo -E 'NIX_PATH=nixpkgs=https://github.com/NixOS/nixpkgs/archive/${{ matrix.nixpkgsPath }}.tar.gz' >> "$GITHUB_ENV"
+        echo -E 'NIX_PATH=nixpkgs=flake:github:NixOS/nixpkgs/${{ matrix.nixpkgs }}' >> "$GITHUB_ENV"
     - name: Restore Nixpkgs cache
       uses: actions/cache/restore@v4
       with:
