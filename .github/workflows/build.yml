@@ -120,8 +120,8 @@ jobs:
             oldModTime="$(find ~/.cache/nix -type f -exec stat -c '%Y' {} + | sort -n | tail -1)"
           fi
           unpackPIDs=()
-          jq -r '[.include[].nixpkgsPath] | unique[]' matrix.json | while IFS= read -r nixpkgsPath; do
-            NIX_PATH="nixpkgs=https://github.com/NixOS/nixpkgs/archive/$nixpkgsPath.tar.gz" nix-instantiate --eval -E '{nixpkgsPath}: nixpkgsPath + ": " + (import <nixpkgs> {}).lib.version' --argstr nixpkgsPath "$nixpkgsPath" &
+          jq -r '[.include[].nixpkgs] | unique[]' matrix.json | while IFS= read -r nixpkgs; do
+            nix-instantiate --eval -E '{nixpkgs}: nixpkgs + ": " + (builtins.getFlake "github:NixOS/nixpkgs/${nixpkgs}").lib.version' --argstr nixpkgs "$nixpkgs" &
             unpackPIDs+=("$!")
           done
           result=true
