@@ -228,7 +228,7 @@ jobs:
       run: |
         set -x
         mkdir /tmp/tempFlake
-        <<EOF >/tmp/tempFlake/flake.nix
+        cat <<EOF >/tmp/tempFlake/flake.nix
         {
           inputs.Rhys-T.url = $(nix-instantiate --eval -E 'toString ./.');
           inputs.Rhys-T.inputs.nixpkgs.url = "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}";
