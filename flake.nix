@@ -32,8 +32,11 @@
         pkgs = import nixpkgs { inherit system; };
       } // {
         ci = let
-          subsetName' = builtins.readFile ciSubsetName.outPath;
-          subsetName = if subsetName' == "" then "all" else subsetName';
+          subsetName = nixpkgs.lib.pipe ciSubsetName.outPath [
+            (x: if nixpkgs.lib.pathIsDirectory x then x+"/ciSubsetName" else x)
+            (builtins.readFile)
+            (x: if x == "" then "all" else x)
+          ];
           cachedBuildFailures' = ciCachedBuildFailures.outPath;
           cachedBuildFailures = if nixpkgs.lib.pathIsDirectory cachedBuildFailures' then cachedBuildFailures' else null;
           ci = import ./ci.nix {
