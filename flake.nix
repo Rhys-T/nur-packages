@@ -9,10 +9,11 @@
     url = "file+file:///dev/null";
     flake = false;
   };
-  nixConfig = {
-    extra-substituters = ["https://rhys-t.cachix.org"];
-    extra-trusted-public-keys = ["rhys-t.cachix.org-1:u01ifDlaQjvJbtMT1Saw+oaFX1Lf/Urw+ND0i/L4kgw="];
-  };
+  # Disabled for now to get rid of the warning - just add the cache manually
+  # nixConfig = {
+  #   extra-substituters = ["https://rhys-t.cachix.org"];
+  #   extra-trusted-public-keys = ["rhys-t.cachix.org-1:u01ifDlaQjvJbtMT1Saw+oaFX1Lf/Urw+ND0i/L4kgw="];
+  # };
   outputs = { self, nixpkgs, ciSubsetName, ciCachedBuildFailures }:
     let
       systems = [
