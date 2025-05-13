@@ -231,7 +231,7 @@ jobs:
         mkdir /tmp/tempFlake
         cat <<EOF >/tmp/tempFlake/flake.nix
         {
-          inputs.Rhys-T.url = $(nix-instantiate --eval -E 'toString ./.');
+          inputs.Rhys-T.url = $(nix-instantiate --eval -E '"git+file://" + toString ./.');
           inputs.Rhys-T.inputs.nixpkgs.url = "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}";
           inputs.Rhys-T.inputs.ciSubsetName = {
               url = "path:./.";
@@ -253,7 +253,7 @@ jobs:
         cat /tmp/tempFlake/flake.nix
         nix flake lock /tmp/tempFlake
         set -o pipefail
-        nix run github:Mic92/nix-fast-build -- -f '/tmp/tempFlake#cacheOutputs' --skip-cached --no-nom | tee /tmp/build-uncached.log
+        nix run github:Mic92/nix-fast-build -- -f '/tmp/tempFlake#cacheOutputs' --skip-cached --no-nom --eval-workers 1 | tee /tmp/build-uncached.log
     - name: Upload build logs
       if: '!cancelled()'
       uses: actions/upload-artifact@v4
