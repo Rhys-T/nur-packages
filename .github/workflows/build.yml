@@ -269,6 +269,7 @@ jobs:
       with:
         name: Rhys-T-nur-packages-build-logs-${{ matrix.runner }}${{ matrix.qemuSystem && format('+qemu-{0}', matrix.qemuSystem) || '' }}-${{ matrix.nixpkgs }}-${{ matrix.subset }}
         path: |
+          /tmp/build-uncached.log
           /nix/var/log
           !/nix/var/log/nix/drvs/*/*user-environment*
         if-no-files-found: ignore
