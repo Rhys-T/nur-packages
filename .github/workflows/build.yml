@@ -229,8 +229,9 @@ jobs:
         echo -En '${{ matrix.subset }}' > /tmp/tempFlake/conf/ciSubsetName
         cat <<EOF >/tmp/tempFlake/flake.nix
         {
+          inputs.nixpkgs.url = "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}";
           inputs.Rhys-T.url = $(nix-instantiate --eval -E '"git+file://" + toString ./.');
-          inputs.Rhys-T.inputs.nixpkgs.url = "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}";
+          inputs.Rhys-T.inputs.nixpkgs.follows = "nixpkgs";
           inputs.Rhys-T.inputs.ciSubsetName = {
               url = "path:/tmp/tempFlake/conf";
               flake = false;
@@ -243,8 +244,11 @@ jobs:
           };
         EOF2
           fi)
-          outputs = {self, Rhys-T}: {
-            cacheOutputs = builtins.mapAttrs (system: ps: ps.ci.cacheOutputsAsAttrs) Rhys-T.legacyPackages;
+          outputs = {self, Rhys-T, nixpkgs}: let inherit (nixpkgs) lib; in {
+            cacheOutputs = lib.pipe Rhys-T.legacyPackages [
+              (builtins.mapAttrs (system: ps: ps.ci.cacheOutputsAsAttrs or null))
+              (lib.filterAttrs (system: co: co != null))
+            ];
           };
         }
         EOF
