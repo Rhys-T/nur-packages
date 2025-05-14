@@ -224,6 +224,7 @@ jobs:
       id: build
       run: |
         set -x
+        ls -al /tmp/buildFailures || true
         mkdir -p /tmp/tempFlake/conf
         tempFlake="$(realpath /tmp/tempFlake)"
         echo -En '${{ matrix.subset }}' > "$tempFlake/conf/ciSubsetName"
