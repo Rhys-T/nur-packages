@@ -255,7 +255,7 @@ jobs:
         # cat "$tempFlake/flake.nix"
         nix flake lock "$tempFlake"
         set -o pipefail
-        nix run github:Mic92/nix-fast-build -- -f "$tempFlake#cacheOutputs" --skip-cached --no-nom --eval-workers 1 2>&1 | \
+        nix run github:Mic92/nix-fast-build -- -f "$tempFlake#cacheOutputs" --skip-cached --no-nom 2>&1 | \
           tee >(nix run 'nixpkgs#ansifilter' > /tmp/build-uncached.log)
     - name: Upload build logs
       if: '!cancelled()'
