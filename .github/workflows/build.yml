@@ -225,6 +225,8 @@ jobs:
       run: |
         set -x
         ls -al /tmp/buildFailures || true
+        [[ -d /tmp/buildFailures ]] && echo '[[ -d /tmp/buildFailures ]]' || echo '[[ ! -d /tmp/buildFailures ]]'
+        exit 1
         mkdir -p /tmp/tempFlake/conf
         tempFlake="$(realpath /tmp/tempFlake)"
         echo -En '${{ matrix.subset }}' > "$tempFlake/conf/ciSubsetName"
