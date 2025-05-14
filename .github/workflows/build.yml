@@ -182,10 +182,6 @@ jobs:
       with:
         nix_conf: |
           ${{ matrix.qemuSystem && format('extra-platforms = {0}', matrix.qemuSystem) || '' }}
-    - name: Set NIX_PATH
-      run: |
-        nix registry pin myNixpkgs "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}"
-        echo -E 'NIX_PATH=nixpkgs=flake:myNixpkgs' >> "$GITHUB_ENV"
     - name: Restore Nixpkgs cache
       uses: actions/cache/restore@v4
       with:
@@ -194,6 +190,10 @@ jobs:
             !~/.cache/nix/binary-cache-*
         key: nixCache-${{ needs.define-matrix.outputs.cacheKey }}
         restore-keys: nixCache-${{ needs.define-matrix.outputs.cachePrefix }}
+    - name: Set NIX_PATH
+      run: |
+        nix registry pin myNixpkgs "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}"
+        echo -E 'NIX_PATH=nixpkgs=flake:myNixpkgs' >> "$GITHUB_ENV"
     - name: Show nixpkgs version
       run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
     - name: Setup cachix
