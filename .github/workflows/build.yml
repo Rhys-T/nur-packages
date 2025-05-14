@@ -225,14 +225,15 @@ jobs:
       run: |
         set -x
         mkdir -p /tmp/tempFlake/conf
-        echo -En '${{ matrix.subset }}' > /tmp/tempFlake/conf/ciSubsetName
-        cat <<EOF >/tmp/tempFlake/flake.nix
+        tempFlake="$(realpath /tmp/tempFlake)"
+        echo -En '${{ matrix.subset }}' > "$tempFlake/conf/ciSubsetName"
+        cat <<EOF >"$tempFlake/flake.nix"
         {
           inputs.nixpkgs.url = "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}";
           inputs.Rhys-T.url = $(nix-instantiate --eval -E '"git+file://" + toString ./.');
           inputs.Rhys-T.inputs.nixpkgs.follows = "nixpkgs";
           inputs.Rhys-T.inputs.ciSubsetName = {
-              url = "path:/tmp/tempFlake/conf";
+              url = "path:$tempFlake/conf";
               flake = false;
           };
           $(if [[ -d /tmp/buildFailures ]]; then
@@ -251,10 +252,10 @@ jobs:
           };
         }
         EOF
-        # cat /tmp/tempFlake/flake.nix
-        nix flake lock /tmp/tempFlake
+        # cat "$tempFlake/flake.nix"
+        nix flake lock "$tempFlake"
         set -o pipefail
-        nix run github:Mic92/nix-fast-build -- -f '/tmp/tempFlake#cacheOutputs' --skip-cached --no-nom --eval-workers 1 2>&1 | \
+        nix run github:Mic92/nix-fast-build -- -f "$tempFlake#cacheOutputs" --skip-cached --no-nom --eval-workers 1 2>&1 | \
           tee >(nix run 'nixpkgs#ansifilter' > /tmp/build-uncached.log)
     - name: Upload build logs
       if: '!cancelled()'
