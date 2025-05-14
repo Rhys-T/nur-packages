@@ -255,7 +255,8 @@ jobs:
     - name: Huh?
       if: ${{ !cancelled() && steps.build.outcome == 'failure' }}
       run: |
-        grep -E 'error: opening file '/.*ciSubsetName': No such file or directory' /tmp/build-uncached.log | grep -Eo '/.*ciSubsetName' | \
+        set -x
+        grep -E "error: opening file '/.*ciSubsetName': No such file or directory" /tmp/build-uncached.log | grep -Eo '/.*ciSubsetName' | \
           sort | uniq | \
           tee /dev/stderr | \
           while IFS= read -r ciSubsetNamePath; do
