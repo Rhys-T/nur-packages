@@ -261,8 +261,8 @@ jobs:
           sort | uniq | \
           tee /dev/stderr | \
           while IFS= read -r ciSubsetNamePath; do
-            echo "$ciSubsetNamePath:"
-            ls -al "$ciSubsetNamePath" || true
+            echo "${ciSubsetNamePath%/*}:"
+            ls -al "${ciSubsetNamePath%/*}" || true
           done
     - name: Upload build logs
       if: '!cancelled()'
