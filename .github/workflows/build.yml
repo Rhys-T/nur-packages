@@ -251,7 +251,7 @@ jobs:
         cat /tmp/tempFlake/flake.nix
         nix flake lock /tmp/tempFlake
         set -o pipefail
-        nix run github:Mic92/nix-fast-build -- -f '/tmp/tempFlake#cacheOutputs' --skip-cached --no-nom --eval-workers 1 | tee /tmp/build-uncached.log
+        nix run github:Mic92/nix-fast-build -- -f '/tmp/tempFlake#cacheOutputs' --skip-cached --no-nom --eval-workers 1 2>&1 | tee /tmp/build-uncached.log
     - name: Huh?
       if: ${{ !cancelled() && steps.build.outcome == 'failure' }}
       run: |
