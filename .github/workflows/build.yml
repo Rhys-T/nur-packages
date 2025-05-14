@@ -232,7 +232,7 @@ jobs:
           inputs.Rhys-T.url = $(nix-instantiate --eval -E '"git+file://" + toString ./.');
           inputs.Rhys-T.inputs.nixpkgs.url = "github:NixOS/nixpkgs/${{ matrix.nixpkgs }}";
           inputs.Rhys-T.inputs.ciSubsetName = {
-              url = "path:./conf";
+              url = "path:/tmp/tempFlake/conf";
               flake = false;
           };
           $(if [[ -d /tmp/buildFailures ]]; then
