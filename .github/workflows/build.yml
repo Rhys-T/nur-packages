@@ -7,20 +7,17 @@ on:
       - 'LICENSE'
       - '.github/**'
       - '!.github/workflows/build.yml'
-      - 'flake.nix'
-      - 'flake.lock'
       - 'update.nix'
   push:
     branches:
       - main
       - master
+      - nix-fast-build
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
       - '.github/**'
       - '!.github/workflows/build.yml'
-      - 'flake.nix'
-      - 'flake.lock'
       - 'update.nix'
   schedule:
     # rebuild everyday at 3:30
