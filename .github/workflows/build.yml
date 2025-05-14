@@ -252,6 +252,16 @@ jobs:
         nix flake lock /tmp/tempFlake
         set -o pipefail
         nix run github:Mic92/nix-fast-build -- -f '/tmp/tempFlake#cacheOutputs' --skip-cached --no-nom --eval-workers 1 | tee /tmp/build-uncached.log
+    - name: Huh?
+      if: ${{ !cancelled() && steps.build.outcome == 'failure' }}
+      run: |
+        grep -E 'error: opening file '/.*ciSubsetName': No such file or directory' /tmp/build-uncached.log | grep -Eo '/.*ciSubsetName' | \
+          sort | uniq | \
+          tee /dev/stderr | \
+          while IFS= read -r ciSubsetNamePath; do
+            echo "$ciSubsetNamePath:"
+            ls -al "$ciSubsetNamePath" || true
+          done
     - name: Upload build logs
       if: '!cancelled()'
       uses: actions/upload-artifact@v4
