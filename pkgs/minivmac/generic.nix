@@ -20,6 +20,7 @@ let
                 i686-linux = "lx86";
                 x86_64-darwin = "mc64";
             } // lib.optionalAttrs isAtLeast37 {
+                aarch64-linux = "larm -cpu a64";
                 aarch64-darwin = "mcar";
             };
             argsPlusDefaults = options.defaultOptions // args;
