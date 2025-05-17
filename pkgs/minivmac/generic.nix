@@ -7,6 +7,7 @@ let
         version,
         src,
         applyMacDataPathPatch ? false,
+        buildPackages,
         callPackage, lib, runCommandLocal, makeBinaryWrapper, stdenv, xorg, alsa-lib, maintainers, ...
     }@args:
         let
@@ -70,7 +71,7 @@ let
             '';
             configurePhase = ''
                 runHook preConfigure
-                cc -o setup_t setup/tool.c
+                ${lib.getExe buildPackages.stdenv.cc} -o setup_t setup/tool.c
                 ./setup_t -t ${targetCode} ${minivmacOptions} ${lib.optionalString (hostPlatform.isDarwin && isAtLeast37) "-cl"} > setup.sh
                 bash setup.sh
                 runHook postConfigure
