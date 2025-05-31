@@ -1,5 +1,6 @@
-{stdenv, lib, zlib, cmake, memorymappingHook ? {}.memorymappingHook, fetchFromGitHub, unstableGitUpdater, maintainers}: let
+{stdenv, lib, zlib, cmake, memorymappingHook ? {}.memorymappingHook, fmt, fetchFromGitHub, unstableGitUpdater, maintainers}: let
     needsMemorymapping = stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
+    needsFmt = stdenv.cc.isClang && stdenv.cc.libcxx != null && lib.versionOlder (lib.getVersion stdenv.cc.libcxx) "17";
 in stdenv.mkDerivation rec {
     pname = "phosg";
     version = "0-unstable-2025-05-26";
@@ -11,9 +12,22 @@ in stdenv.mkDerivation rec {
     };
     postPatch = ''
         sed -Ei '/set\(CMAKE_OSX_ARCHITECTURES/ s@^@#@' CMakeLists.txt
+    '' + lib.optionalString needsFmt ''
+        shopt -s globstar
+        for file in src/**/*.{cc,hh}; do
+            substituteInPlace "$file" \
+                --replace-quiet '#include <format>' '#include <fmt/format.h>' \
+                --replace-quiet 'std::format' 'fmt::format' \
+                --replace-quiet 'return format(' 'return fmt::format('
+        done
+        shopt -u globstar
     '';
     nativeBuildInputs = [cmake];
     buildInputs = [zlib] ++ lib.optionals needsMemorymapping [memorymappingHook];
+    propagatedBuildInputs = lib.optionals needsFmt [fmt];
+    env = lib.optionalAttrs needsFmt {
+        NIX_LDFLAGS = "-lfmt";
+    };
     meta = {
         description = "C++ helpers for some common tasks";
         longDescription = ''
