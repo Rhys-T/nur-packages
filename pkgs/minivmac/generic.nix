@@ -7,9 +7,11 @@ let
         version,
         src,
         applyMacDataPathPatch ? false,
+        targetCode ? null,
         buildPackages,
         callPackage, lib, runCommandLocal, makeBinaryWrapper, stdenv, xorg, alsa-lib, maintainers, ...
     }@args:
+        let targetCode' = targetCode; in
         let
             options = callPackage ./options.nix { };
             isAtLeast37 = lib.versionAtLeast version "37a";
@@ -29,7 +31,7 @@ let
             
             inherit (argsPlusDefaults) maintainer homepage;
             minivmacOptions = options.buildOptionsFrom argsForOptions;
-            targetCode = minivmacOptions.targetCode or targetCodes.${hostPlatform.system} or (throw ''
+            targetCode = if targetCode' != null then targetCode' else targetCodes.${hostPlatform.system} or (throw ''
                 Platform ${hostPlatform.system} is not currently supported by this derivation.
                 If this platform is listed on one of:
                 - https://www.gryphel.com/c/minivmac/options.html#option_t

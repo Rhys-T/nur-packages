@@ -12,7 +12,7 @@ let
     ];
     withOrder = o: f: {__functor = self: f; order = o;};
     optProc = {
-        targetCode = procStr "t";
+        # targetCode = procStr "t"; # handled separately in generic.nix
         macModel = procStr "m";
         localtalk = procBoolNoArg "lt";
         localtalkOver = procStr "lto";
