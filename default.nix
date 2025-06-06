@@ -230,7 +230,7 @@ in {
     }) picolisp');
     
     picolisp-rolling = let
-        inherit (pkgs) lib fetchFromGitea;
+        inherit (pkgs) lib fetchFromGitHub;
         inherit (self) picolisp;
         picolisp' = picolisp.overrideAttrs (old: {
             version = "25.5.30";
