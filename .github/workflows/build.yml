@@ -259,7 +259,7 @@ jobs:
         set -o pipefail
         nix shell github:Mic92/nix-fast-build 'nixpkgs#ansifilter' -c bash -c '
           nix-fast-build -f "$tempFlake#cacheOutputs" --skip-cached --no-nom 2>&1 | \
-            tee >(nix run ansifilter > /tmp/build-uncached.log)
+            tee >(ansifilter > /tmp/build-uncached.log)
         '
     - name: Upload build logs
       if: '!cancelled()'
