@@ -253,7 +253,7 @@ in {
                     ])}
                     set -euo pipefail
                     ghcurl() {
-                        curl -H 'X-GitHub-Api-Version: 2022-11-28 ''${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} "$@"
+                        curl -H 'X-GitHub-Api-Version: 2022-11-28' ''${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} "$@"
                     }
                     jqOrDump() {
                         local data
