@@ -227,7 +227,7 @@ jobs:
         set -x
         ls -al /tmp/buildFailures || true
         mkdir -p /tmp/tempFlake/conf
-        tempFlake="$(realpath /tmp/tempFlake)"
+        export tempFlake="$(realpath /tmp/tempFlake)"
         echo -En '${{ matrix.subset }}' > "$tempFlake/conf/ciSubsetName"
         cat <<EOF >"$tempFlake/flake.nix"
         {
