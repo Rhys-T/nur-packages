@@ -21,9 +21,9 @@ let
                 x86_64-linux = "lx64";
                 i686-linux = "lx86";
                 x86_64-darwin = "mc64";
-            } // lib.optionalAttrs isAtLeast37 {
-                aarch64-linux = "larm -cpu a64";
-                aarch64-darwin = "mcar";
+            # } // lib.optionalAttrs isAtLeast37 {
+                aarch64-linux = "larm" + lib.optionalString isAtLeast37 " -cpu a64";
+                aarch64-darwin = if isAtLeast37 then "mcar" else "mc64 -cpu arm";
             };
             argsPlusDefaults = options.defaultOptions // args;
             # Until 37.x, these two options need to be patched into setup/CNFGDLFT.i instead
