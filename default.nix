@@ -192,7 +192,7 @@ in {
     
     minivmac-ii = self.minivmac.override { macModel = "II"; };
     minivmac-ii-unstable = self.minivmac-unstable.override { macModel = "II"; };
-    minivmac-ii-ci = self.minivmac-unstable.ci { macModel = "II"; };
+    minivmac-ii-ce = self.minivmac-ce.override { macModel = "II"; };
     
     mame = dontUpdate (callPackage (pkgs.callPackage ./pkgs/mame {}) {});
     mame-metal = dontUpdate (self.mame.override { darwinMinVersion = "11.0"; });
