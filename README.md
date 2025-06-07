@@ -83,6 +83,8 @@ The `mame` derivation in nixpkgs is currently broken on macOS. By default, nixpk
 
 ### `minivmac`
 
+Upstream project site is at <https://www.gryphel.com/>, with a mirror hosted at <https://minivmac.github.io/gryphel-mirror/>. If an emulator error message told you to come here for more information, you probably want to look at the documentation on those sites.
+
 I've made several of the [compile-time options](https://www.gryphel.com/c/minivmac/options.html) for Mini vMac available through `minivmac.override { ... }`. Until I can document this properly, look for the `optProc` block in `pkgs/minivmac/options.nix` to see what's available. For anything I haven't covered, you can override `rawOptions` with a string to add to the end of the `./setup_t` command.
 
 #### Examples

@@ -55,7 +55,7 @@ in rec {
     # takesOptions = f: takesOptions' { inherit f; };
     defaultOptions = {
         maintainer = "Rhys-T on GitHub";
-        homepage = "https://github.com/Rhys-T/nur-packages";
+        homepage = "https://github.com/Rhys-T/nur-packages"; # Really ought to have a `#minivmac` anchor, but the builtin font doesn't have `#`
     };
     extractOptions = args: builtins.intersectAttrs optProc (
         args // 
