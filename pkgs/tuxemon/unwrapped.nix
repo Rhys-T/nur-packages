@@ -38,6 +38,8 @@ in let
             substituteInPlace neteria/core.py --replace-fail 'is not 0' '!= 0'
         '';
         dependencies = with python3Packages; [rsa];
+        pyproject = true;
+        build-system = with python3Packages; [setuptools];
     };
     pyscroll = python3Packages.buildPythonPackage rec {
         pname = "pyscroll";
@@ -47,6 +49,8 @@ in let
             hash = "sha256-GQIFGyCEN5/I22mfCgDSbV0g5o+Nw8RT316vOSsqbHA=";
         };
         dependencies = with python3Packages; [pygame-ce];
+        pyproject = true;
+        build-system = with python3Packages; [setuptools];
     };
     pygame_menu_ce = python3Packages.buildPythonPackage rec {
         pname = "pygame_menu_ce";
@@ -56,6 +60,8 @@ in let
             hash = "sha256-9Y85GHJjBLoE1mt6k+PbRt2J0jr0aPOfWmjL3QjJPhI=";
         };
         dependencies = with python3Packages; [pygame-ce pyperclip typing-extensions];
+        pyproject = true;
+        build-system = with python3Packages; [setuptools];
     };
     tuxemon = python3Packages.buildPythonApplication {
         pname = "tuxemon";
