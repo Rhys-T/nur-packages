@@ -202,10 +202,10 @@ in {
     pacifi3d = callPackage ./pkgs/pacifi3d {};
     pacifi3d-mame = self.pacifi3d.override { romsFromMAME = self.mame; };
     pacifi3d-hbmame = self.pacifi3d.override { romsFromMAME = self.hbmame; };
-    _ciOnly.pacifi3d-rom-xmls = pkgs.lib.recurseIntoAttrs {
-        mame = self.pacifi3d-mame.romsFromXML;
-        hbmame = self.pacifi3d-hbmame.romsFromXML;
-    };
+    # _ciOnly.pacifi3d-rom-xmls = pkgs.lib.recurseIntoAttrs {
+    #     mame = self.pacifi3d-mame.romsFromXML;
+    #     hbmame = self.pacifi3d-hbmame.romsFromXML;
+    # };
     
     # Backported fixes from https://github.com/NixOS/nixpkgs/pull/385459
     picolisp = let
