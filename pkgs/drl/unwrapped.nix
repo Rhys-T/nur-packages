@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
                 /GetSymbolExt\s*:=/! d
             }
         ' "$FPCVALKYRIE_ROOT"/libs/vgl3library.pas
-    '' + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    '' + lib.optionalString (!stdenv.hostPlatform.isx86) ''
         sed -E -i '
             s@Set8087CW@// &@g
             /LoadFMOD/,/^end;/ {
