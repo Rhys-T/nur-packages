@@ -27,8 +27,11 @@
                     /__MAC_OS_X_VERSION_MIN_REQUIRED/i\
                 #define XSTR(x) STR(x)\
                 #define STR(x) #x\
-                #pragma message "__MAC_OS_X_VERSION_MIN_REQUIRED = "XSTR(__MAC_OS_X_VERSION_MIN_REQUIRED)\
-                #error "abort"
+                #pragma message "__MAC_OS_X_VERSION_MIN_REQUIRED = " XSTR(__MAC_OS_X_VERSION_MIN_REQUIRED)
+                    /kAudioObjectPropertyElementMain/a\
+                #warning "chose kAudioObjectPropertyElementMain"
+                    /kAudioObjectPropertyElementMaster/a\
+                #warning "chose kAudioObjectPropertyElementMaster"
                 ' src/osd/modules/sound/coreaudio_sound.cpp
             '';
             makeFlags = old.makeFlags ++ ["SUBTARGET=tiny"];
