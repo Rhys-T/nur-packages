@@ -22,6 +22,11 @@
                     'backtick("sw_vers -productVersion")' \
                     "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
                   done
+            '' + ''
+                sed -Ei '
+                    /os_version =/a\
+                    error(('os_version = %q'):format(os_version))
+                ' scripts/src/osd/sdl.lua
             '';
             meta = (old.meta or {}) // {
                 description = "${old.meta.description or "MAME"} (fixed for macOS/Darwin)";
