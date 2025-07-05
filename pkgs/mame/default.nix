@@ -32,6 +32,18 @@
                 #warning "chose kAudioObjectPropertyElementMain"
                     /kAudioObjectPropertyElementMaster/a\
                 #warning "chose kAudioObjectPropertyElementMaster"
+                    /^namespace osd$/ i\
+                #if __MAC_OS_X_VERSION_MIN_REQUIRED == 110300\
+                #warning "== 110300"\
+                #else\
+                #warning "!= 110300"\
+                #endif\
+                #if 110300 >= 120000\
+                #warning "WTF"\
+                #else\
+                #warning "OK"\
+                #endif\
+                #error "ABORT"
                 ' src/osd/modules/sound/coreaudio_sound.cpp
             '';
             makeFlags = old.makeFlags ++ ["SUBTARGET=tiny"];
