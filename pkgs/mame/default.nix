@@ -31,7 +31,7 @@
                 #error "abort"
                 ' src/osd/modules/sound/coreaudio_sound.cpp
             '';
-            makeFlags = old.makeFlags ++ ["TARGET=tiny"];
+            makeFlags = old.makeFlags ++ ["SUBTARGET=tiny"];
             meta = (old.meta or {}) // {
                 description = "${old.meta.description or "MAME"} (fixed for macOS/Darwin)";
                 broken = false;
