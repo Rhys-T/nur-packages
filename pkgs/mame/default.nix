@@ -24,9 +24,12 @@
                   done
             '' + ''
                 sed -Ei '
-                    /os_version =/a\
-                    error(("os_version = %q"):format(os_version))
-                ' scripts/src/osd/sdl.lua
+                    /__MAC_OS_X_VERSION_MIN_REQUIRED/i\
+                #define XSTR(x) STR(x)\
+                #define STR(x) #x\
+                #pragma message "__MAC_OS_X_VERSION_MIN_REQUIRED = "XSTR(__MAC_OS_X_VERSION_MIN_REQUIRED)\
+                #error "abort"
+                ' src/osd/modules/sound/coreaudio_sound.cpp
             '';
             meta = (old.meta or {}) // {
                 description = "${old.meta.description or "MAME"} (fixed for macOS/Darwin)";
