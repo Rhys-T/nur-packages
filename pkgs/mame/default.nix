@@ -25,7 +25,7 @@
             '' + ''
                 sed -Ei '
                     /os_version =/a\
-                    error(('os_version = %q'):format(os_version))
+                    error(("os_version = %q"):format(os_version))
                 ' scripts/src/osd/sdl.lua
             '';
             meta = (old.meta or {}) // {
