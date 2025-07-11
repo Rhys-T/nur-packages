@@ -46,14 +46,14 @@ jobs:
             [
               # "Lnx x64/ubuntu-latest",
               # "Lnx A64/ubuntu-24.04-arm",
-              "Mac x64/macos-latest-large",
+              "Mac x64/macos-latest+rosetta2",
               # "Mac A64/macos-latest",
             empty] as $runners |
             
             [
               "nixpkgs-unstable",
-              "nixos-unstable",
-              "nixos-\(($beta, $stable, $oldStable) | select(. != null))",
+              # "nixos-unstable",
+              # "nixos-\(($beta, $stable, $oldStable) | select(. != null))",
             empty] as $nixpkgss |
             
             [
@@ -75,6 +75,8 @@ jobs:
               (if $qemuSystem then {
                 "aarch64-linux": "arm64",
               }[$qemuSystem] else null end) as $qemuSystemForAction |
+              ($runner | split("+rosetta2")) as [$runner, $rosetta2] |
+              ($rosetta2 != null) as $rosetta2 |
               # (if $qemuSystem then $subsets[] else "all" end) as $subset |
               $subsets[] as $subset |
               select(($runner | startswith("macos")) or ($subset != "mame")) |
@@ -88,7 +90,7 @@ jobs:
               .) as $displayNixpkgs |
               ("\($displayRunner)-\($displayNixpkgs)-\($subset)" | gsub(" "; "-")) as $cacheName |
               (if $qemuSystem then "TODO make qemu builds work again" | error else . end) |
-              {$displayRunner, $runner, $qemuSystem, $qemuSystemForAction, $displayNixpkgs, $nixpkgs, $nixpkgsPath, $subset, $nurRepo, $cachixName, $cacheName}
+              {$displayRunner, $runner, $qemuSystem, $qemuSystemForAction, $rosetta2, $displayNixpkgs, $nixpkgs, $nixpkgsPath, $subset, $nurRepo, $cachixName, $cacheName}
             ]}
             
           EOF
@@ -176,6 +178,10 @@ jobs:
       uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
       with:
         platforms: ${{ matrix.qemuSystemForAction }}
+    - name: Install Rosetta 2
+      if: ${{ matrix.rosetta2 }}
+      run: |
+        softwareupdate --install-rosetta --agree-to-license
     - name: Install nix
       uses: nixbuild/nix-quick-install-action@63ca48f939ee3b8d835f4126562537df0fee5b91 # v32
       with:
@@ -248,7 +254,7 @@ jobs:
           outputs = {self, Rhys-T, nixpkgs}: let inherit (nixpkgs) lib; in {
             cacheOutputs = lib.pipe Rhys-T.legacyPackages [
               (builtins.mapAttrs (system: ps: ps.ci.cacheOutputsAsAttrs or null))
-              (lib.filterAttrs (system: co: system == $(nix-instantiate --eval '<nixpkgs>' -A system) && co != null))
+              (lib.filterAttrs (system: co: system == ${{ matrix.rosetta2 && '"x86_64-darwin"' || '$(nix-instantiate --eval ''<nixpkgs>'' -A system)' }} && co != null))
             ];
           };
         }
@@ -257,7 +263,7 @@ jobs:
         nix flake lock "$tempFlake"
         nix shell github:Mic92/nix-fast-build 'nixpkgs#ansifilter' -c bash -c '
           set -o pipefail
-          nix-fast-build -f "$tempFlake#cacheOutputs" --skip-cached --no-nom 2>&1 | \
+          nix-fast-build -f "$tempFlake#cacheOutputs" --skip-cached --no-nom ${{ matrix.rosetta2 && '--systems x86_64-darwin' || '' }} 2>&1 | \
             tee >(ansifilter > /tmp/build-uncached.log)
         '
     - name: Upload build logs
