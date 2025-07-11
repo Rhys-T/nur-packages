@@ -135,6 +135,7 @@ in let
             install -Dm644 mods/tuxemon/gfx/icon_128.png "$out"/share/icons/hicolor/128x128/apps/org.tuxemon.Tuxemon.png
             install -Dm644 mods/tuxemon/gfx/icon_32.png "$out"/share/icons/hicolor/32x32/apps/org.tuxemon.Tuxemon.png
         '';
+        dontStrip = true;
         meta = {
             description = "Open source monster-fighting RPG";
             longDescription = ''
