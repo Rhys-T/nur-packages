@@ -1,28 +1,27 @@
 name: "Build and populate cache"
 on:
   workflow_dispatch: # allows manual triggering
-  pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-      - '.github/**'
-      - '!.github/workflows/build.yml'
-      - 'update.nix'
+  # pull_request:
+  #   paths-ignore:
+  #     - 'README.md'
+  #     - 'LICENSE'
+  #     - '.github/**'
+  #     - '!.github/workflows/build.yml'
+  #     - 'update.nix'
   push:
     branches:
-      - main
-      - master
+      - test-macos-runners
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
       - '.github/**'
       - '!.github/workflows/build.yml'
       - 'update.nix'
-  schedule:
-    # rebuild everyday at 3:30
-    # TIP: Choose a random time here so not all repositories are build at once:
-    # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
-    - cron:  '30 3 * * *'
+  # schedule:
+  #   # rebuild everyday at 3:30
+  #   # TIP: Choose a random time here so not all repositories are build at once:
+  #   # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
+  #   - cron:  '30 3 * * *'
 jobs:
   define-matrix:
     name: Define job matrix
@@ -45,10 +44,10 @@ jobs:
             "24.11" as $oldStable |
             
             [
-              "Lnx x64/ubuntu-latest",
-              "Lnx A64/ubuntu-24.04-arm",
-              "Mac x64/macos-13",
-              "Mac A64/macos-latest",
+              # "Lnx x64/ubuntu-latest",
+              # "Lnx A64/ubuntu-24.04-arm",
+              "Mac x64/macos-latest-large",
+              # "Mac A64/macos-latest",
             empty] as $runners |
             
             [
@@ -59,9 +58,9 @@ jobs:
             
             [
               "base",
-              "mame",
-              "hbmame",
-              "qemu-screamer",
+              # "mame",
+              # "hbmame",
+              # "qemu-screamer",
             empty] as $subsets |
             
             {include: [
