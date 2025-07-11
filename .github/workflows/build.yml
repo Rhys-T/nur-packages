@@ -226,6 +226,9 @@ jobs:
         key: buildFailures-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys:
           buildFailures-
+    - name: No really, try building something
+      run: |
+        nix-build -E 'let pkgs = import <nixpkgs> { system = "aarch64-darwin"; }; in import ./. { inherit pkgs; }' -A minivmac
     - name: Build nix packages
       id: build
       run: |
