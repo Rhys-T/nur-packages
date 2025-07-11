@@ -228,7 +228,7 @@ jobs:
           buildFailures-
     - name: No really, try building something
       run: |
-        nix-build -E 'let pkgs = import <nixpkgs> { system = "aarch64-darwin"; }; in import ./. { inherit pkgs; }' -A minivmac
+        nix-build -E 'let pkgs = import <nixpkgs> { system = "x86_64-darwin"; }; in import ./. { inherit pkgs; }' -A minivmac
     - name: Build nix packages
       id: build
       run: |
