@@ -10,8 +10,9 @@ on:
       - 'update.nix'
   push:
     branches:
-      - main
-      - master
+      # - main
+      # - master
+      - test/ci-force-error
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
@@ -53,15 +54,15 @@ jobs:
             
             [
               "nixpkgs-unstable",
-              "nixos-unstable",
-              "nixos-\(($beta, $stable, $oldStable) | select(. != null))",
+              # "nixos-unstable",
+              # "nixos-\(($beta, $stable, $oldStable) | select(. != null))",
             empty] as $nixpkgss |
             
             [
               "base",
-              "mame",
-              "hbmame",
-              "qemu-screamer",
+              # "mame",
+              # "hbmame",
+              # "qemu-screamer",
             empty] as $subsets |
             
             {include: [

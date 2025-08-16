@@ -70,6 +70,11 @@ in {
     
     maintainers = import ./maintainers.nix;
     
+    fake-error = pkgs.runCommand "fake-error" {} ''
+        echo "This derivation should always get an error." >&2
+        exit 1
+    '';
+    
     allegro5 = let
         needsMacPatch =
             pkgs.stdenv.hostPlatform.isDarwin &&
