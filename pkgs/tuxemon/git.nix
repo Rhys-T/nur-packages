@@ -1,6 +1,6 @@
 {callPackage}: callPackage ./generic.nix {
-    version = "0.4.34-unstable-2025-08-12";
-    rev = "0a03541bb14170c99acb5ab1c1537a0c6ec97a2f";
-    hash = "sha256-lJqTlK9rJLcP+6QhnslAU+QUYPDAK/VGKWUhFkxyzQE=";
-    dataHash = "sha256-Ut5huimunuXD6NmhwAIXDl+2DgYIB7Fh1sXSM6CK7K0=";
+    version = "0.4.34-unstable-2025-08-16";
+    rev = "1431208586118b46e9d7860fd55618f0b117726d";
+    hash = "sha256-fNburi17i77eQ95HxEkKPCOzJWNoj/RlowRE7QYzYDc=";
+    dataHash = "sha256-UicqSJ12o28IZ4tqctwgkxqsnh7NaHM4akWxCg7S8dQ=";
 }
