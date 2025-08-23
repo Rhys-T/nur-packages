@@ -17,7 +17,8 @@ in stdenvNoCC.mkDerivation {
             # ImageMagick 7.1.1-44 is adding an extra tEXt chunk to its output PNGs.
             # https://github.com/ImageMagick/ImageMagick/issues/7977#issuecomment-2682981255
             # This strips it back out to make the hash consistent.
-            lib.optionalString (lib.versionAtLeast imagemagick.version "7.1.1-44")
+            # Seems to be fixed in 7.1.1-45.
+            lib.optionalString (lib.versionAtLeast imagemagick.version "7.1.1-44" && lib.versionOlder imagemagick.version "7.1.1-45")
             ''${" "}-exec ${lib.getExe perl} -pi -e 's|\x00\x00\x00\x13\x74\x45\x58\x74\x6D\x69\x6D\x65\x3A\x74\x79\x70\x65\x00\x69\x6D\x61\x67\x65\x2F\x70\x6E\x67\xB9\x95\x10\x87||g' {} +''
         }
         echo 'Done.'
