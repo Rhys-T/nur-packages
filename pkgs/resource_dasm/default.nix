@@ -1,4 +1,4 @@
-{stdenv, lib, zlib, cmake, memorymappingHook ? {}.memorymappingHook, fmt, phosg, netpbm, fetchFromGitHub, useNetpbm?false, ripgrep, makeBinaryWrapper, unstableGitUpdater, maintainers}: let
+{stdenv, lib, zlib, cmake, memorymappingHook ? {}.memorymappingHook, fmt, phosg, netpbm, sdl3, fetchFromGitHub, useNetpbm?false, useSDL?true, ripgrep, makeBinaryWrapper, unstableGitUpdater, maintainers}: let
     needsMemorymapping = stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
     needsFmt = stdenv.cc.isClang && stdenv.cc.libcxx != null && lib.versionOlder (lib.getVersion stdenv.cc.libcxx) "17";
 in stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
         hash = "sha256-Qpffx1KT59u2neSqZ+4P54jsJKwfK0MFZhT2BfVRut4=";
     };
     nativeBuildInputs = [cmake] ++ lib.optionals useNetpbm [makeBinaryWrapper];
-    buildInputs = [phosg zlib] ++ lib.optionals needsMemorymapping [memorymappingHook] ++ lib.optionals needsFmt [fmt];
+    buildInputs = [phosg zlib] ++ lib.optionals useSDL [sdl3] ++ lib.optionals needsMemorymapping [memorymappingHook] ++ lib.optionals needsFmt [fmt];
     # The CMakeLists.txt file provided doesn't install all the executables. Patch it to include the rest:
     postPatch = ''
         allExes=($(sed -En '
