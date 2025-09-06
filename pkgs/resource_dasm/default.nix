@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
             installLine="install(TARGETS $exeToInstall DESTINATION bin)"
             ${lib.getExe ripgrep} -Fq "$installLine" CMakeLists.txt || echo "$installLine" >> CMakeLists.txt
         done
+        substituteInPlace CMakeLists.txt --replace-fail 'pop2_render' '''
     '' + lib.optionalString needsFmt ''
         shopt -s globstar
         for file in src/**/*.{cc,hh}; do
