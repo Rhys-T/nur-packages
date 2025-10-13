@@ -183,7 +183,7 @@ in let
                 mit # for tuxemon/lib/bresenham.py
             ];
             maintainers = [maintainers.Rhys-T];
-            broken = !(lib.meta.availableOn hostPlatform python3Packages.pygame-ce);
+            broken = !(lib.meta.availableOn hostPlatform python3Packages.pygame-ce) || has3179;
         };
         pos = _pos;
         passthru.updateScript = let
