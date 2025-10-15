@@ -92,15 +92,18 @@ in stdenv.mkDerivation rec {
     passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     passthru._Rhys-T.flakeApps = rdName: resource_dasm: let
         lines = lib.splitString "\n" resource_dasm.meta.longDescription;
-        matchInfo = map (builtins.match "    \\* \\*\\*([^*]+)\\*\\*.*") lines;
-        actualMatches = builtins.filter (x: x != null) matchInfo;
-        appNames = lib.lists.remove "libresource_file" (map (x: builtins.elemAt x 0) actualMatches);
-        flakeApps = builtins.listToAttrs (map (name: {
+        matchInfo = map (builtins.match "    \\* \\*\\*([^*]+)\\*\\*: (.*)") lines;
+        actualMatches = builtins.filter (x: x != null && builtins.elemAt x 0 != "libresource_file") matchInfo;
+        flakeApps = builtins.listToAttrs (map (appInfo: let
+            name = builtins.elemAt appInfo 0;
+            description = builtins.elemAt appInfo 1;
+        in {
             inherit name;
             value = {
                 type = "app";
                 program = lib.getExe' resource_dasm name;
+                meta = { inherit description; };
             };
-        }) appNames);
+        }) actualMatches);
     in flakeApps;
 }
