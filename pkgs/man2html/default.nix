@@ -16,6 +16,7 @@
         install -Dm644 COPYING "$out/share/licenses/man2html/COPYING"
         runHook postInstall
     '';
+    passthru.updateScript = ./update.sh;
     meta = {
         description = "Unix manpage-to-HTML converter";
         homepage = "https://invisible-island.net/scripts/man2html.html";
