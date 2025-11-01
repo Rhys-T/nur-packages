@@ -119,6 +119,7 @@ in {
             makeBinaryWrapper ${lib.getExe electron} "$out/bin/shapez-ce" \
                 --add-flags "$out/share/shapez-ce/resources/app.asar" \
                 --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+                --set ELECTRON_FORCE_IS_PACKAGED 1 \
                 --inherit-argv0
         ''}
         mkdir -p "$out/share/licenses/shapez-ce"
