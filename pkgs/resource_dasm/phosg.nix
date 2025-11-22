@@ -3,12 +3,12 @@
     needsFmt = fuzziqersoftwareFmtPatchHook.isNeeded;
 in stdenv.mkDerivation rec {
     pname = "phosg";
-    version = "0-unstable-2025-09-11";
+    version = "0-unstable-2025-11-21";
     src = fetchFromGitHub {
         owner = "fuzziqersoftware";
         repo = "phosg";
-        rev = "b2e0c12edb7e274a5e20c460f44eee44f49f57ef";
-        hash = "sha256-9ciKqjq74IU1VuttykQ+J0k7jgdMrKz1Dc/bzOwKsjQ=";
+        rev = "49cbd8fa6227c07ac95a118d11e9c80a37862f61";
+        hash = "sha256-1/kg781UBykFioulDhgh5axYbPTHA9QhFP1klJzwpq8=";
     };
     postPatch = ''
         sed -Ei '/set\(CMAKE_OSX_ARCHITECTURES/ s@^@#@' CMakeLists.txt
