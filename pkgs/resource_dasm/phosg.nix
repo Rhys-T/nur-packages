@@ -11,7 +11,9 @@ in stdenv.mkDerivation rec {
         hash = "sha256-1/kg781UBykFioulDhgh5axYbPTHA9QhFP1klJzwpq8=";
     };
     postPatch = ''
-        sed -Ei '/set\(CMAKE_OSX_ARCHITECTURES/ s@^@#@' CMakeLists.txt
+        substituteInPlace CMakeLists.txt \
+            --replace-fail 'set(CMAKE_OSX_ARCHITECTURES' '#set(CMAKE_OSX_ARCHITECTURES' \
+            --replace-fail 'target_link_libraries(phosg atomic)' 'target_link_libraries(phosg PRIVATE atomic)'
     '';
     nativeBuildInputs = [cmake] ++ lib.optionals needsMemorymapping [memorymappingHook] ++ lib.optionals needsFmt [fuzziqersoftwareFmtPatchHook];
     buildInputs = [zlib];
