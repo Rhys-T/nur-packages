@@ -256,6 +256,9 @@ in {
                 hash = "sha256-2xgzQxM2NjbJP7V2ZXbwxhkPDWSDGJTKEfKPuT6DmnM=";
             };
             sourceRoot = null;
+            ${if pkgs.stdenv.hostPlatform.isDarwin then "env" else null} = (old.env or {}) // {
+                NIX_LDFLAGS = (old.env.NIX_LDFLAGS or "") + " -lresolv";
+            };
             passthru = (old.passthru or {}) // {
                 updateScript = pkgs.writeShellScript "update-picolisp-rolling" ''
                     PATH=${lib.makeBinPath (with pkgs; [
