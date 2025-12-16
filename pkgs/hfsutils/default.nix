@@ -32,9 +32,8 @@ stdenv.mkDerivation rec {
 
   # Apply patches from debian
   prePatch = ''
-    for p in $(cat ../debian/patches/series); do
-      patches+=" ../debian/patches/$p"
-    done
+    debianPatches="$(cat ../debian/patches/series | sed 's,^,../debian/patches/,')"
+    concatTo patches debianPatches
   '';
 
   patches = [
