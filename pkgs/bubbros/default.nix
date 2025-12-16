@@ -63,8 +63,9 @@ in stdenv.mkDerivation (finalAttrs: let self = finalAttrs.finalPackage; in {
     };
     prePatch = ''
     tar -xaf "$debian"
-    debianPatches="$(cat debian/patches/series | sed 's,^,debian/patches/,')"
-    concatTo patches debianPatches
+    for p in $(cat debian/patches/series); do
+      appendToVar patches "debian/patches/$p"
+    done
     '';
     postPatch = ''
         substituteInPlace display/Client.py --replace-fail 'os.readlink(LOCALDIR)' 'os.path.realpath(LOCALDIR)'
