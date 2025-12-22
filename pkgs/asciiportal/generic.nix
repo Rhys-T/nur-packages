@@ -38,6 +38,9 @@ in stdenv.mkDerivation rec {
         hash = "sha256-gUe1n5TTE7Lm7Bj0hq8gYVt2x0Mioe1nMZtnRbQxvVg=";
     }) ];
     postPatch = ''
+        sed -Ei '
+            /^      switch \(event\.type\) \{/,/^      \}/ s/default :/case SDL_KEYDOWN:/
+        ' src/ap_input.cpp
         sed -E -i '
             s/^CXX =/#&/
             s/libpdcurses\.a/pdcurses.a/g
