@@ -89,7 +89,7 @@ in {
             pkgs.lib.versionAtLeast pkgs.allegro5.version "5.2.10.0" &&
             pkgs.lib.versionOlder pkgs.allegro5.version "5.2.10.1"
         ;
-    in dontUpdate (pkgs.allegro5.overrideAttrs (old: {
+    in myLib.warnDeprecated.allegro5 "allegro5" pkgs.allegro5 (dontUpdate (pkgs.allegro5.overrideAttrs (old: {
         patches = (old.patches or []) ++ pkgs.lib.optionals needsMacPatch [
             (pkgs.fetchpatch {
                 url = "https://github.com/Rhys-T/allegro5/commit/7c928e34042fd7b83d55649f240a38e937ed169b.patch";
@@ -105,7 +105,7 @@ in {
         !(old?outputs)
     ) {
         outputs = ["out" "dev"];
-    }));
+    })));
     
     lix-game-packages = callPackage ./pkgs/lix-game/packages.nix (pkgs.lib.optionalAttrs myLib.isDeprecated.ldc {
         inherit (pkgs) buildDubPackage;
@@ -166,7 +166,7 @@ in {
         })];
     } // {
         meta = old.meta // {
-            description = (old.meta.description or "ldc") + " (fixed for macOS 15.4)" + pkgs.lib.optionalString myLib.isDeprecated.ldc " [DEPRECATED]";
+            description = (old.meta.description or "ldc") + " (fixed for macOS 15.4)";
             pos = myPos "ldc";
         };
     })));
@@ -174,7 +174,7 @@ in {
         inherit (if myLib.isDeprecated.ldc then pkgs else self) ldc;
     }).overrideAttrs (old: {
         meta = old.meta // {
-            description = (old.meta.description or "dub") + " (fixed for macOS 15.4)" + pkgs.lib.optionalString myLib.isDeprecated.ldc " [DEPRECATED]";
+            description = (old.meta.description or "dub") + " (fixed for macOS 15.4)";
             pos = myPos "dub";
         };
     })));
@@ -211,12 +211,11 @@ in {
     dc2dsk = callPackage ./pkgs/dc2dsk {};
     
     mame = myLib.warnDeprecated.mame "mame" pkgs.mame (dontUpdate (callPackage (pkgs.callPackage ./pkgs/mame {}) {}));
-    mame-metal = myLib.warnDeprecated.mame "mame-metal" pkgs.mame (dontUpdate (self.mame.override { darwinMinVersion = "11.0"; }));
+    mame-metal = let
+        mame-metal = if myLib.isDeprecated.mame then self.mame else (dontUpdate self.mame.override { darwinMinVersion = "11.0"; });
+    in myLib.warnDeprecated.mame "mame-metal" pkgs.mame mame-metal;
     hbmame = callPackage ./pkgs/mame/hbmame (pkgs.lib.optionalAttrs myLib.isDeprecated.mame { inherit (pkgs) mame; });
-    hbmame-metal = myLib.warnDeprecated.mame "hbmame-metal"
-        (self.hbmame.override { _isDeprecatedMetalVersion = true; })
-        (self.hbmame.override { mame = self.mame-metal; _isDeprecatedMetalVersion = true; })
-    ;
+    hbmame-metal = myLib.warnDeprecated.mame "hbmame-metal" self.hbmame (if myLib.isDeprecated.mame then self.hbmame else self.hbmame.override { mame = self.mame-metal; });
     
     pacifi3d = callPackage ./pkgs/pacifi3d {};
     pacifi3d-mame = self.pacifi3d.override { romsFromMAME = if myLib.isDeprecated.mame then pkgs.mame else self.mame; };
@@ -346,7 +345,7 @@ in {
         inherit (pkgs) stdenv lib icbm3d;
         needsFix = !(lib.any (lib.hasSuffix "-darwin") (icbm3d.meta.platforms or ["-darwin"]));
     in myLib.warnDeprecated.pr419640 "icbm3d" icbm3d (dontUpdate (myLib.addMetaAttrsDeep {
-        description = "${icbm3d.meta.description or "icbm3d"} (fixed for macOS/Darwin)" + lib.optionalString myLib.isDeprecated.pr419640 " [DEPRECATED]";
+        description = "${icbm3d.meta.description or "icbm3d"} (fixed for macOS/Darwin)";
         platforms = icbm3d.meta.platforms ++ lib.platforms.darwin;
         position = myPos "icbm3d";
     } (if needsFix then icbm3d.overrideAttrs (old: {
@@ -367,7 +366,7 @@ in {
         inherit (pkgs) stdenv lib xgalagapp;
         needsFix = !(lib.any (lib.hasSuffix "-darwin") (xgalagapp.meta.platforms or ["-darwin"]));
     in myLib.warnDeprecated.pr419640 "xgalagapp" xgalagapp (dontUpdate (myLib.addMetaAttrsDeep {
-        description = "${xgalagapp.meta.description or "xgalagapp"} (fixed for macOS/Darwin)" + lib.optionalString myLib.isDeprecated.pr419640 " [DEPRECATED]";
+        description = "${xgalagapp.meta.description or "xgalagapp"} (fixed for macOS/Darwin)";
         platforms = xgalagapp.meta.platforms ++ lib.platforms.darwin;
         position = myPos "xgalagapp";
     } (if needsFix then xgalagapp.overrideAttrs (old: {

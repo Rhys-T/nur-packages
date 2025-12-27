@@ -29,18 +29,22 @@ with pkgs.lib; rec {
     
     oldestSupportedReleaseIsAtLeast = pkgs.lib.oldestSupportedReleaseIsAtLeast or pkgs.lib.isInOldestRelease;
     isDeprecated = {
+      allegro5 = oldestSupportedReleaseIsAtLeast 2505;
       ldc = oldestSupportedReleaseIsAtLeast 2505;
       mame = oldestSupportedReleaseIsAtLeast 2505;
       pr419640 = oldestSupportedReleaseIsAtLeast 2511;
     };
     warnDeprecated = mapAttrs (deprType: isDepd: attr: pkg: myPkg: let
-      noun = if pkgs.lib.isDerivation pkg then "package" else "attribute";
+      isDrv = pkgs.lib.isDerivation pkg;
+      noun = if isDrv then "package" else "attribute";
     in if isDepd then
       warnOnInstantiate "Rhys-T's `${attr}` ${noun} is deprecated. Please use ${
         if attr == "hbmame-metal" then
           "Rhys-T's main `hbmame` package"
         else
-          "the `${attr}` ${noun} from Nixpkgs"
-      } instead." pkg
+          "the `${if isDrv then pkgs.lib.getName pkg else attr}` ${noun} from Nixpkgs"
+      } instead." (pkg // pkgs.lib.optionalAttrs (myPkg?meta.description) {
+        meta = pkg.meta // { description = myPkg.meta.description + pkgs.lib.optionalString (!(pkgs.lib.hasInfix "[DEPRECATED]" myPkg.meta.description)) " [DEPRECATED]"; };
+      })
     else myPkg) isDeprecated;
 }
