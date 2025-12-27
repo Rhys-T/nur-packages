@@ -26,13 +26,16 @@ with pkgs.lib; rec {
     drv // mapAttrs (_: warn msg) drvToWrap;
     
     oldestSupportedReleaseIsAtLeast = pkgs.lib.oldestSupportedReleaseIsAtLeast or pkgs.lib.isInOldestRelease;
-    deprecateMAMEBuilds = oldestSupportedReleaseIsAtLeast 2505;
-    warnMAME = attr: mame: myMAME: if deprecateMAMEBuilds then
+    isDeprecated = {
+      mame = oldestSupportedReleaseIsAtLeast 2505;
+      pr419640 = oldestSupportedReleaseIsAtLeast 2511;
+    };
+    warnDeprecated = mapAttrs (deprType: isDepd: attr: pkg: myPkg: if isDepd then
       warnOnInstantiate "Rhys-T's `${attr}` package is deprecated. Please use ${
-        if pkgs.lib.getName mame == "hbmame" then
+        if pkgs.lib.getName pkg == "hbmame" then
           "Rhys-T's main `hbmame` package"
         else
-          "the `mame` package from Nixpkgs"
-      } instead." mame
-    else myMAME;
+          "the `${attr}` package from Nixpkgs"
+      } instead." pkg
+    else myPkg) isDeprecated;
 }

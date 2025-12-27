@@ -208,16 +208,16 @@ in {
     
     dc2dsk = callPackage ./pkgs/dc2dsk {};
     
-    mame = myLib.warnMAME "mame" pkgs.mame (dontUpdate (callPackage (pkgs.callPackage ./pkgs/mame {}) {}));
-    mame-metal = myLib.warnMAME "mame-metal" pkgs.mame (dontUpdate (self.mame.override { darwinMinVersion = "11.0"; }));
-    hbmame = callPackage ./pkgs/mame/hbmame (pkgs.lib.optionalAttrs myLib.deprecateMAMEBuilds { inherit (pkgs) mame; });
-    hbmame-metal = myLib.warnMAME "hbmame-metal"
+    mame = myLib.warnDeprecated.mame "mame" pkgs.mame (dontUpdate (callPackage (pkgs.callPackage ./pkgs/mame {}) {}));
+    mame-metal = myLib.warnDeprecated.mame "mame-metal" pkgs.mame (dontUpdate (self.mame.override { darwinMinVersion = "11.0"; }));
+    hbmame = callPackage ./pkgs/mame/hbmame (pkgs.lib.optionalAttrs myLib.isDeprecated.mame { inherit (pkgs) mame; });
+    hbmame-metal = myLib.warnDeprecated.mame "hbmame-metal"
         (self.hbmame.override { _isDeprecatedMetalVersion = true; })
         (self.hbmame.override { mame = self.mame-metal; _isDeprecatedMetalVersion = true; })
     ;
     
     pacifi3d = callPackage ./pkgs/pacifi3d {};
-    pacifi3d-mame = self.pacifi3d.override { romsFromMAME = if myLib.deprecateMAMEBuilds then pkgs.mame else self.mame; };
+    pacifi3d-mame = self.pacifi3d.override { romsFromMAME = if myLib.isDeprecated.mame then pkgs.mame else self.mame; };
     pacifi3d-hbmame = self.pacifi3d.override { romsFromMAME = self.hbmame; };
     _ciOnly.pacifi3d-rom-xmls = pkgs.lib.recurseIntoAttrs {
         mame = self.pacifi3d-mame.romsFromXML;
@@ -343,8 +343,8 @@ in {
     icbm3d = let
         inherit (pkgs) stdenv lib icbm3d;
         needsFix = !(lib.any (lib.hasSuffix "-darwin") (icbm3d.meta.platforms or ["-darwin"]));
-    in dontUpdate (myLib.addMetaAttrsDeep {
-        description = "${icbm3d.meta.description or "icbm3d"} (fixed for macOS/Darwin)";
+    in myLib.warnDeprecated.pr419640 "icbm3d" icbm3d (dontUpdate (myLib.addMetaAttrsDeep {
+        description = "${icbm3d.meta.description or "icbm3d"} (fixed for macOS/Darwin)" + lib.optionalString myLib.isDeprecated.pr419640 " [DEPRECATED]";
         platforms = icbm3d.meta.platforms ++ lib.platforms.darwin;
         position = myPos "icbm3d";
     } (if needsFix then icbm3d.overrideAttrs (old: {
@@ -359,13 +359,13 @@ in {
             # and moves on, but it's probably better to not try it in the first place.
             sed -i '/INSTALLROOT/d' makefile
         '';
-    }) else icbm3d));
+    }) else icbm3d)));
     
     xgalagapp = let
         inherit (pkgs) stdenv lib xgalagapp;
         needsFix = !(lib.any (lib.hasSuffix "-darwin") (xgalagapp.meta.platforms or ["-darwin"]));
-    in dontUpdate (myLib.addMetaAttrsDeep {
-        description = "${xgalagapp.meta.description or "xgalagapp"} (fixed for macOS/Darwin)";
+    in myLib.warnDeprecated.pr419640 "xgalagapp" xgalagapp (dontUpdate (myLib.addMetaAttrsDeep {
+        description = "${xgalagapp.meta.description or "xgalagapp"} (fixed for macOS/Darwin)" + lib.optionalString myLib.isDeprecated.pr419640 " [DEPRECATED]";
         platforms = xgalagapp.meta.platforms ++ lib.platforms.darwin;
         position = myPos "xgalagapp";
     } (if needsFix then xgalagapp.overrideAttrs (old: {
@@ -382,7 +382,7 @@ in {
             
             runHook postInstall
         '';
-    }) else xgalagapp));
+    }) else xgalagapp)));
     
     # fpc = let
     #     inherit (pkgs) lib;
