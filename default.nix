@@ -211,7 +211,10 @@ in {
     mame = myLib.warnMAME "mame" pkgs.mame (dontUpdate (callPackage (pkgs.callPackage ./pkgs/mame {}) {}));
     mame-metal = myLib.warnMAME "mame-metal" pkgs.mame (dontUpdate (self.mame.override { darwinMinVersion = "11.0"; }));
     hbmame = callPackage ./pkgs/mame/hbmame (pkgs.lib.optionalAttrs myLib.deprecateMAMEBuilds { inherit (pkgs) mame; });
-    hbmame-metal = myLib.warnMAME "hbmame-metal" self.hbmame (self.hbmame.override { mame = self.mame-metal; });
+    hbmame-metal = myLib.warnMAME "hbmame-metal"
+        (self.hbmame.override { _isDeprecatedMetalVersion = true; })
+        (self.hbmame.override { mame = self.mame-metal; _isDeprecatedMetalVersion = true; })
+    ;
     
     pacifi3d = callPackage ./pkgs/pacifi3d {};
     pacifi3d-mame = self.pacifi3d.override { romsFromMAME = if myLib.deprecateMAMEBuilds then pkgs.mame else self.mame; };
