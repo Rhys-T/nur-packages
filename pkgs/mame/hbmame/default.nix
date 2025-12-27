@@ -6,6 +6,7 @@
     curl,
     jq,
     nix-prefetch-git,
+    maintainers,
     myLib, _isDeprecatedMetalVersion ? false,
 }: let
     mame' = if (lib.functionArgs mame.override)?papirus-icon-theme then mame.override {
@@ -131,6 +132,7 @@
             '';
             homepage = "https://hbmame.1emulation.com/";
             mainProgram = "hbmame";
+            maintainers = with maintainers; [ Rhys-T ];
         };
     });
 in hbmame'
