@@ -54,7 +54,7 @@
 # , gitUpdater
 # SCREAMER:
 , nixpkgs-qemu9_1
-, fetchFromGitHub, fetchFromGitLab
+, fetchFromGitHub, fetchFromGitLab, fetchgit
 , maintainers
 , qemu
 , qemu-utils # for tests attribute
@@ -151,6 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
       fi
       git config -f "$newGitConfig" 'url.https://github.com/tianocore/edk2-subhook.git.insteadOf' 'https://github.com/Zeex/subhook.git'
       gitConfigFile="$newGitConfig"
+    '' + lib.optionalString (!((lib.functionArgs fetchgit)?gitConfigFile)) ''
+      export GIT_CONFIG_GLOBAL="$gitConfigFile"
     '';
     hash = "sha256-7c+PxNHxbWnV3X5FHens3mAuka1nXItmaCH6aH6X2rQ=";
   };
