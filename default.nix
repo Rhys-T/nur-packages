@@ -107,7 +107,9 @@ in {
         outputs = ["out" "dev"];
     }));
     
-    lix-game-packages = callPackage ./pkgs/lix-game/packages.nix {};
+    lix-game-packages = callPackage ./pkgs/lix-game/packages.nix (pkgs.lib.optionalAttrs myLib.isDeprecated.ldc {
+        inherit (pkgs) buildDubPackage;
+    });
     lix-game = self.lix-game-packages.game;
     lix-game-server = self.lix-game-packages.server;
     lix-game-libpng = if pkgs.stdenv.hostPlatform.isDarwin then (self.lix-game-packages.overrideScope (self: super: {
@@ -155,7 +157,7 @@ in {
                 hash = oldBootstrapHashes."${OS}-${ARCH}" or (throw "missing bootstrap hash for ${OS}-${ARCH}");
             };
         });
-    in dontUpdate ((pkgs.ldc.override (pkgs.lib.optionalAttrs needsMacPatch {
+    in myLib.warnDeprecated.ldc "ldc" pkgs.ldc (dontUpdate ((pkgs.ldc.override (pkgs.lib.optionalAttrs needsMacPatch {
         ldcBootstrap = oldBootstrap;
     })).overrideAttrs (old: pkgs.lib.optionalAttrs needsMacPatch {
         patches = (old.patches or []) ++ [(pkgs.fetchpatch {
@@ -164,21 +166,21 @@ in {
         })];
     } // {
         meta = old.meta // {
-            description = (old.meta.description or "ldc") + " (fixed for macOS 15.4)";
+            description = (old.meta.description or "ldc") + " (fixed for macOS 15.4)" + pkgs.lib.optionalString myLib.isDeprecated.ldc " [DEPRECATED]";
             pos = myPos "ldc";
         };
-    }));
-    dub = dontUpdate ((pkgs.dub.override {
-        inherit (self) ldc;
+    })));
+    dub = myLib.warnDeprecated.ldc "dub" pkgs.dub (dontUpdate ((pkgs.dub.override {
+        inherit (if myLib.isDeprecated.ldc then pkgs else self) ldc;
     }).overrideAttrs (old: {
         meta = old.meta // {
-            description = (old.meta.description or "dub") + " (fixed for macOS 15.4)";
+            description = (old.meta.description or "dub") + " (fixed for macOS 15.4)" + pkgs.lib.optionalString myLib.isDeprecated.ldc " [DEPRECATED]";
             pos = myPos "dub";
         };
-    }));
-    buildDubPackage = pkgs.buildDubPackage.override {
-        inherit (self) ldc dub;
-    };
+    })));
+    buildDubPackage = myLib.warnDeprecated.ldc "buildDubPackage" pkgs.buildDubPackage (pkgs.buildDubPackage.override {
+        inherit (if myLib.isDeprecated.ldc then pkgs else self) ldc dub;
+    });
     
     xscorch = callPackage ./pkgs/xscorch {};
     

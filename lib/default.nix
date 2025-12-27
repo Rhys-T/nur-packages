@@ -13,8 +13,10 @@ with pkgs.lib; rec {
   in if p?overrideAttrs then p.overrideAttrs (old: addMetaAttrs m old) else addMetaAttrs m p;
   
   # Variation of `pkgs.lib.warnOnInstantiate` that also leaves my custom attributes alone.
+  # Also changes to an immediate warning for non-derivations.
   warnOnInstantiate =
     msg: drv:
+    if !(pkgs.lib.isDerivation drv) then warn msg drv else
     let
       drvToWrap = removeAttrs drv [
         "meta"
@@ -27,15 +29,18 @@ with pkgs.lib; rec {
     
     oldestSupportedReleaseIsAtLeast = pkgs.lib.oldestSupportedReleaseIsAtLeast or pkgs.lib.isInOldestRelease;
     isDeprecated = {
+      ldc = oldestSupportedReleaseIsAtLeast 2505;
       mame = oldestSupportedReleaseIsAtLeast 2505;
       pr419640 = oldestSupportedReleaseIsAtLeast 2511;
     };
-    warnDeprecated = mapAttrs (deprType: isDepd: attr: pkg: myPkg: if isDepd then
-      warnOnInstantiate "Rhys-T's `${attr}` package is deprecated. Please use ${
-        if pkgs.lib.getName pkg == "hbmame" then
+    warnDeprecated = mapAttrs (deprType: isDepd: attr: pkg: myPkg: let
+      noun = if pkgs.lib.isDerivation pkg then "package" else "attribute";
+    in if isDepd then
+      warnOnInstantiate "Rhys-T's `${attr}` ${noun} is deprecated. Please use ${
+        if attr == "hbmame-metal" then
           "Rhys-T's main `hbmame` package"
         else
-          "the `${attr}` package from Nixpkgs"
+          "the `${attr}` ${noun} from Nixpkgs"
       } instead." pkg
     else myPkg) isDeprecated;
 }
