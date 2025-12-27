@@ -244,14 +244,14 @@ in {
         } // lib.optionalAttrs needsLibutil {
             buildInputs = (old.buildInputs or []) ++ [darwin.libutil];
         });
-    in dontUpdate (myLib.addMetaAttrsDeep ({
+    in myLib.warnDeprecated.picolisp "picolisp" picolisp (dontUpdate (myLib.addMetaAttrsDeep ({
         description = (picolisp.meta.description or "PicoLisp") + " (fixed for macOS/Darwin)";
         position = myPos "picolisp";
-    }) picolisp');
+    }) picolisp'));
     
     picolisp-rolling = let
         inherit (pkgs) lib fetchFromGitHub;
-        inherit (self) picolisp;
+        inherit (if myLib.isDeprecated.picolisp then pkgs else self) picolisp;
         picolisp' = picolisp.overrideAttrs (old: {
             version = "25.12.21";
             src = fetchFromGitHub {
