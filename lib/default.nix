@@ -14,6 +14,8 @@ with pkgs.lib; rec {
   
   # Variation of `pkgs.lib.warnOnInstantiate` that also leaves my custom attributes alone.
   # Also changes to an immediate warning for non-derivations.
+  # Also propagates warning to `overrideAttrs` versions rather than warning when it's called.
+  # (That last bit makes it interact better with `dontUpdate` back in `default.nix`.)
   warnOnInstantiate =
     msg: drv:
     if !(pkgs.lib.isDerivation drv) then warn msg drv else
@@ -23,9 +25,12 @@ with pkgs.lib; rec {
         "name"
         "type"
         "_Rhys-T"
+        "overrideAttrs"
       ];
     in
-    drv // mapAttrs (_: warn msg) drvToWrap;
+    drv // mapAttrs (_: warn msg) drvToWrap // pkgs.lib.optionalAttrs (drv?overrideAttrs) {
+      overrideAttrs = arg: warnOnInstantiate msg (drv.overrideAttrs arg);
+    };
     
     oldestSupportedReleaseIsAtLeast = pkgs.lib.oldestSupportedReleaseIsAtLeast or pkgs.lib.isInOldestRelease;
     isDeprecated = {
