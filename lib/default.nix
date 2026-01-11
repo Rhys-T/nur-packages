@@ -41,14 +41,15 @@ with pkgs.lib; rec {
       nameOverrides = {
         mame-metal = "mame";
       };
+      tagDesc = pkg: let
+        newDesc = myPkg.meta.description + pkgs.lib.optionalString (!(pkgs.lib.hasInfix "[DEPRECATED]" myPkg.meta.description)) " [DEPRECATED]";
+      in if myPkg?meta.description then addMetaAttrsDeep { description = newDesc; } pkg else pkg;
     in if isDepd then
       warnOnInstantiate "Rhys-T's `${attr}` ${noun} is deprecated. Please use ${
         if attr == "hbmame-metal" then
           "Rhys-T's main `hbmame` package"
         else
           "the `${nameOverrides.${attr} or attr}` ${noun} from Nixpkgs"
-      } instead." (pkg // pkgs.lib.optionalAttrs (myPkg?meta.description) {
-        meta = pkg.meta // { description = myPkg.meta.description + pkgs.lib.optionalString (!(pkgs.lib.hasInfix "[DEPRECATED]" myPkg.meta.description)) " [DEPRECATED]"; };
-      })
-    else myPkg) isDeprecated;
+      } instead." (tagDesc pkg)
+    else tagDesc myPkg) isDeprecated;
 }
