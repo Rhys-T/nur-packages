@@ -58,7 +58,7 @@ let
         outputHash = src.hashWithoutROMs;
     });
     pkgsm68kElf = import (pkgs.path+"/pkgs/top-level") {
-        localSystem.system = pkgs.system;
+        localSystem.system = stdenv.buildPlatform.system;
         crossSystem.config = "m68k-none-elf";
     };
     macplus-cc = pkgsm68kElf.stdenv.cc;
