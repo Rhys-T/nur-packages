@@ -188,7 +188,7 @@ in {
     pce-with-unfree-roms = self.pce.override { enableUnfreeROMs = true; };
     pce-snapshot = callPackage ./pkgs/pce/snapshot.nix {};
     
-    bubbros = callPackage ./pkgs/bubbros {};
+    ${if (builtins.tryEval (pkgs.python27 or (throw ""))).success then "bubbros" else null} = callPackage ./pkgs/bubbros {};
     
     flatzebra = callPackage ./pkgs/flatzebra {};
     burgerspace = callPackage ./pkgs/flatzebra/burgerspace.nix {};
