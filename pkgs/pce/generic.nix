@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         maintainers = [maintainers.Rhys-T];
         sourceProvenance = with lib.sourceTypes; [
             fromSource
-        ] ++ lib.optionals (!buildExtensionROMs) [
+        ] ++ lib.optionals (enableUnfreeROMs || !buildExtensionROMs) [
             # A couple of the emulators include 'ROM extensions' that are prebuilt.
             # They're machine code for real CPUs that existed, but in the context of
             # running them in an emulator - and because they actually _need_ to run
