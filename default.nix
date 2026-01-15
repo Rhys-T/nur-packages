@@ -180,7 +180,7 @@ in {
         inherit (if myLib.isDeprecated.ldc then pkgs else self) ldc dub;
     });
     
-    xscorch = callPackage ./pkgs/xscorch {};
+    ${if (builtins.tryEval (pkgs.gtk2 or (throw ""))).success then "xscorch" else null} = callPackage ./pkgs/xscorch {};
     
     impluse = callPackage ./pkgs/impluse {};
     
