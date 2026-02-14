@@ -12,8 +12,7 @@ in stdenv.mkDerivation rec {
     };
     postPatch = ''
         substituteInPlace CMakeLists.txt \
-            --replace-fail 'set(CMAKE_OSX_ARCHITECTURES' '#set(CMAKE_OSX_ARCHITECTURES' \
-            --replace-fail 'target_link_libraries(phosg atomic)' 'target_link_libraries(phosg PRIVATE atomic)'
+            --replace-fail 'set(CMAKE_OSX_ARCHITECTURES' '#set(CMAKE_OSX_ARCHITECTURES'
     '';
     nativeBuildInputs = [cmake] ++ lib.optionals needsMemorymapping [memorymappingHook] ++ lib.optionals needsFmt [fuzziqersoftwareFmtPatchHook];
     buildInputs = [zlib];
