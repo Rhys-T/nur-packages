@@ -71,11 +71,8 @@
         ] [
             "install -Dm755 hbmame -t $out/bin"
             "{artwork,bgfx,plugins,language,ctrlr,hash}" # no keymaps included with HBMAME
-            "installManPage docs/man/*.6" # not installing tools
+            "" # no man pages
         ] installPhase'';
-        postInstall = (old.postInstall or "") + ''
-            mv "$out"/share/man/man6/{,hb}mame.6
-        '';
         postFixup = let
             postFixup = builtins.replaceStrings ["moveToOutput share/man/man1 $tools"] [""] (old.postFixup or "");
         in if postFixup == "\n" then null else postFixup;
