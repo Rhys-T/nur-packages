@@ -39,7 +39,24 @@
                         name = "update-source-version";
                         runtimeInputs = [old.common-updater-scripts];
                         text = ''
-                            update-source-version "$@"
+                            args=()
+                            for arg in "$@"; do
+                                case "$arg" in
+                                    --print-changes)
+                                        printChanges=true
+                                        continue
+                                        ;;
+                                esac
+                                args+=("$arg")
+                            done
+                            set -- "''${args[@]}"
+                            changes="$(update-source-version "$@" --print-changes)"
+                            if [[ "$changes" == '[]' ]]; then
+                                if [[ -n "$printChanges" ]]; then
+                                    echo '[]'
+                                fi
+                                exit 0
+                            fi
                             args=()
                             for arg in "$@"; do
                                 case "$arg" in
@@ -49,12 +66,17 @@
                                 esac
                                 args+=("$arg")
                             done
-                            update-source-version "''${args[@]}" --ignore-same-version --source-key=pkgs._toUpdate.assets
-                            update-source-version "''${args[@]}" --ignore-same-version --source-key=pkgs._toUpdate.assets-PNG32
+                            set -- "''${args[@]}"
+                            update-source-version "$@" --ignore-same-version --source-key=pkgs._toUpdate.assets
+                            update-source-version "$@" --ignore-same-version --source-key=pkgs._toUpdate.assets-PNG32
                             
                             # Until I figure out how to auto-update the music, at least check it and fail if it's changed:
-                            nix-build --no-out-link -A "$UPDATE_NIX_ATTR_PATH".pkgs._toUpdate.music-bin
-                            nix-build --no-out-link -A "$UPDATE_NIX_ATTR_PATH".pkgs._toUpdate.music-bin --check
+                            nix-build --no-out-link -A "$UPDATE_NIX_ATTR_PATH".pkgs._toUpdate.music-bin > /dev/null
+                            nix-build --no-out-link -A "$UPDATE_NIX_ATTR_PATH".pkgs._toUpdate.music-bin --check > /dev/null
+                            
+                            if [[ -n "$printChanges" ]]; then
+                                echo -E "$changes"
+                            fi
                         '';
                     })
                     old.common-updater-scripts
