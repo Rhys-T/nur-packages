@@ -3,16 +3,36 @@
     writeShellScript,
     common-updater-scripts,
     coreutils,
+    qt6, sdl3, sdl3-ttf,
     gitMinimal,
     jq,
     nix-prefetch-git,
     maintainers,
     myLib,
 }: let
-    mame' = if (lib.functionArgs mame.override)?papirus-icon-theme then mame.override {
-        papirus-icon-theme = "DUMMY";
-    } else mame;
-    hbmame' = mame'.overrideAttrs (old: rec {
+    mameArgs = lib.functionArgs mame.override;
+    mame' = mame.override (lib.intersectAttrs mameArgs {
+            papirus-icon-theme = "DUMMY";
+            
+            # Upstream MAME and HBMAME have both been updated to use Qt6 instead:
+            libsForQt5 = qt6;
+            inherit (qt6) qtbase wrapQtAppsHook;
+            
+            # <https://github.com/NixOS/nixpkgs/pull/495586>
+            SDL2 = sdl3;
+            SDL2_ttf = sdl3-ttf;
+    });
+    # <https://github.com/NixOS/nixpkgs/pull/495586>
+    needsSDL3Patch = !(mameArgs?sdl3);
+    mame'' = mame'.overrideAttrs (old: lib.optionalAttrs needsSDL3Patch {
+        makeFlags = (old.makeFlags or []) ++ ["OSD=sdl3"];
+        postPatch = (old.postPatch or "") + lib.optionalString stdenv.hostPlatform.isDarwin ''
+            substituteInPlace scripts/src/osd/sdl3.lua --replace-fail \
+              'backtick("sw_vers -productVersion")' \
+              "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
+        '';
+    });
+    hbmame' = mame''.overrideAttrs (old: rec {
         pname = "hbmame";
         version = "0.288";
         src = fetchFromGitHub {
