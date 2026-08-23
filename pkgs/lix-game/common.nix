@@ -39,7 +39,6 @@
                         name = "update-source-version";
                         runtimeInputs = [old.common-updater-scripts dub-to-nix];
                         text = ''
-                            set -x
                             args=()
                             for arg in "$@"; do
                                 case "$arg" in
