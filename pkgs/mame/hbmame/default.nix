@@ -61,6 +61,11 @@
         outputs = lib.lists.remove "tools" (old.outputs or ["out"]);
         patches = lib.pipe old.patches [
             (builtins.filter (patch: !(lib.hasSuffix "13890.patch" (""+patch))))
+        ] ++ [
+            (fetchpatch {
+                url = "https://github.com/mamedev/mame/commit/8d155c368b0a3730f2acbd26237c5207115cdd31.patch";
+                hash = "sha256-nkWDfFHk64LqfTlQiyXWwClZnHQXIK9/i9ZlTEq145I=";
+            })
         ];
         postPatch = builtins.replaceStrings [''
             substituteInPlace src/emu/emuopts.cpp \
