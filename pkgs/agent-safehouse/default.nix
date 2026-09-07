@@ -1,6 +1,6 @@
 { lib, stdenvNoCC, fetchFromGitHub, fetchpatch, useNixPatch ? true, gitUpdater, maintainers }: stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "agent-safehouse";
-    version = "0.11.1";
+    version = "0.12.0";
     src = fetchFromGitHub {
         owner = "eugene1g";
         repo = "agent-safehouse";
@@ -14,7 +14,7 @@
             popd
             shopt -u globstar
         '';
-        hash = "sha256-TmP5g9/q4N1bcmbefpuC3LoeDfzxxGSZX74BRwKRsCg=";
+        hash = "sha256-Cn0403ercH9c67BT4uUZ4/UfL8Vq+SP05DzbtSHwysc=";
     };
     postPatch = ''
         substituteInPlace scripts/generate-dist.sh --replace-fail \
