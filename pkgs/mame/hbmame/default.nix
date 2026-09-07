@@ -70,7 +70,7 @@
               substituteInPlace "$file" \
                 --subst-var-by mamePath "$out/opt/mame"
             done
-        ''] old.postPatch ++ ''
+        ''] old.postPatch + ''
             substituteInPlace src/lib/util/archiver.cpp --replace-fail '#include <zutil.h>' '//#include <zutil.h>'
         '';
         makeFlags = map (x: if x == "TOOLS=1" then "TOOLS=0" else x) (old.makeFlags or []) ++ ["TARGET=hbmame"];
