@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, useNixPatch ? true, gitUpdater, maintainers }: stdenvNoCC.mkDerivation (finalAttrs: {
+{ lib, stdenvNoCC, fetchFromGitHub, gitUpdater, maintainers }: stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "agent-safehouse";
     version = "0.12.0";
     src = fetchFromGitHub {
@@ -31,14 +31,6 @@
         install -Dm755 dist/safehouse.sh "$out"/bin/safehouse
         runHook postInstall
     '';
-    patches = lib.optional useNixPatch (fetchpatch {
-        name = "support-nix-package-manager.patch";
-        urls = [
-            "file://${./support-nix-package-manager.patch}"
-            "https://github.com/Rhys-T/agent-safehouse/commit/cd0f83db603f1e6036ec781ccdba2ed8d16213f4.patch"
-        ];
-        hash = "sha256-I0DbATAcMbYBE77nPDemrpPOMjZ4lPvoqdkBjuykgJo=";
-    });
     meta = {
         description = "macOS sandbox wrapper for coding agents";
         homepage = "https://agent-safehouse.dev/";
