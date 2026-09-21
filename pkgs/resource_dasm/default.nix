@@ -37,11 +37,6 @@ in stdenv.mkDerivation rec {
         # HACK: Fix invalid format strings.
         substituteInPlace src/Audio/MODSynthesizer.cc --replace-fail '{:-2}' '{:<2}'
         substituteInPlace src/Audio/smssynth.cc --replace-fail '{:-7}' '{:<7}'
-        
-        # HACK: Fix missing parentheses
-        substituteInPlace src/resource_dasm.cc --replace-fail \
-            'uint32_t next_code_addr = ret.base + (ret.a5_world_size + 1) & (~1);' \
-            'uint32_t next_code_addr = ret.base + ((ret.a5_world_size + 1) & (~1));'
     '';
     ${if useNetpbm then "postInstall" else null} = ''
         for file in "$out"/bin/*; do
