@@ -71,9 +71,10 @@ in stdenv.mkDerivation rec {
                 * **gcmdump**: Extracts all files in a GCM file (GameCube disc image) or TGC file (embedded GameCube disc image).
                 * **gcmasm**: Generates a GCM image from a directory tree.
                 * **gvmdump**: Extracts all files in a GVM archive (from Phantasy Star Online) to the current directory, and converts the GVR textures to Windows BMP files. Also can decode individual GVR files outside of a GVM archive.
+                * **rarcdump**: Extracts all files in a RARC or SZS archive to the current directory.
                 * **rcfdump**: Extracts all files in a RCF archive (from The Simpsons: Hit and Run) to the current directory.
                 * **smsdumpbanks**: Extracts the contents of JAudio instrument and waveform banks in AAF, BX, or BAA format (from Super Mario Sunshine, Luigi's Mansion, Pikmin, and other games). See "Using smssynth" for more information.
-                * **smssynth**: Synthesizes and debugs music sequences in BMS format (from Super Mario Sunshine, Luigi's Mansion, Pikmin, and other games) or MIDI format (from classic Macintosh games). See "Using smssynth" for more information.
+                * **smssynth**: Synthesizes and debugs music sequences in BMS format (from Super Mario Sunshine, Luigi's Mansion, Pikmin, and other games), or MIDI/Tune/QTMA formats (from classic Macintosh games). See "Using smssynth" for more information.
                 * **modsynth**: Synthesizes and debugs music sequences in Protracker/Soundtracker MOD format.
             * Game map generators
                 * **blobbo_render**: Generates maps from Blobbo levels.
@@ -85,6 +86,8 @@ in stdenv.mkDerivation rec {
                 * **infotron_render**: Generates maps from Infotron levels files.
                 * **lemmings_render**: Generates maps from Lemmings and Oh No! More Lemmings levels and graphics files.
                 * **mshines_render**: Generates maps from Monkey Shines world files.
+                * **pop1_render**: Generates maps from the Mac version of Prince of Persia.
+                * **pop2_render**: Generates maps from the Mac version of Prince of Persia 2.
                 * **realmz_dasm**: Generates maps from Realmz scenarios and disassembles the scenario scripts into readable assembly-like syntax.
         '';
         homepage = "https://github.com/fuzziqersoftware/resource_dasm";
