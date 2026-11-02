@@ -54,6 +54,9 @@
               inherit system;
               config.allowAliases = false;
               config.allowDeprecatedx86_64Darwin = true;
+              config.problems.handlers = {
+                "gtk+".broken = "ignore";
+              };
             };
             inherit subsetName cachedBuildFailures;
           };
