@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub, llama-cpp, avx2Support ? true, maintainers }: let
-    toshllm-version = "0.87.34";
-    toshllm-hash = "sha256-aj2CCIgWHfpmt35W4nQTdvyuWiaKXeIUIZ0k72HLF10=";
-    llama-cpp-rev = "d81235049384534c167caea52b85a694f6103d14";
-    llama-cpp-hash = "sha256-l6l6JIlIVTaVC6xh5M4fRHFtXsweQuugtkNTWHcZZF4=";
-    llama-cpp-npmDepsHash = "sha256-vPPviazkbTSDgVlXhXv5ICcIG6QJ9NmDGE0lFcOMOsg=";
+    toshllm-version = "0.88.0";
+    toshllm-hash = "sha256-5VT6KCEL0Zamn02U7iVUs6e6YJTi+nRgpMJH/TaWljU=";
+    llama-cpp-rev = "b1b770d90d94cad9e9ea5b993bdbc383a522fb28";
+    llama-cpp-hash = "sha256-aYziwYzK9Zj7sopAEsrANhMGs4BO0F2g0cDCGmYLxDA=";
+    llama-cpp-npmDepsHash = "sha256-8raY7n8fA9SSRg+T1zwB3Iey/BT7IIjb+oL09DdrWGU=";
     
     toshllmSrc = fetchFromGitHub {
         owner = "engeldlgado";
